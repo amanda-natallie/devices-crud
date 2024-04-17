@@ -14,7 +14,7 @@ const config: ViteConfig = {
       web: ['.*\\.[tj]sx?$'],
     },
     root: './src',
-    include: ['**/*.{test,spec}.{ts,tsx}'],
+    include: ['**/*.test.{ts,tsx}'],
 
     exclude: [
       '**/__tests__/**/*',
