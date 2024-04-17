@@ -1,7 +1,4 @@
-import { Helpers } from 'tests/helpers';
-import { it } from 'vitest';
-
-import { render } from '@testing-library/react';
+import { Helpers, render } from 'utils/test';
 
 import App from './App';
 

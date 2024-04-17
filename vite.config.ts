@@ -10,15 +10,14 @@ const config: ViteConfig = {
   test: {
     globals: true,
     environment: 'jsdom',
-    testTransformMode: {
-      web: ['.*\\.[tj]sx?$'],
-    },
+    setupFiles: './src/test/setup.ts',
     root: './src',
     include: ['**/*.test.{ts,tsx}'],
 
     exclude: [
       '**/__tests__/**/*',
-      '**/tests/helpers.tsx',
+      '**/index.ts',
+      '**/utils/test/*.tsx',
       '**/*.styles.ts',
       '**/*.config.ts',
       '**/config/**/*.ts',
@@ -29,7 +28,7 @@ const config: ViteConfig = {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       reportsDirectory: '../coverage-report',
-      exclude: ['**/main.tsx', '**/tests/helpers.tsx'],
+      exclude: ['**/main.tsx', '**/utils/test/*.tsx', '**/index.ts'],
       enabled: true,
       thresholds: {
         statements: 80,

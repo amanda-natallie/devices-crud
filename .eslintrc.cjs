@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: { browser: true, es2020: true, jest: true },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -10,7 +10,7 @@ module.exports = {
     'airbnb/hooks',
     'prettier',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['build', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', 'react', 'prettier', 'react-hooks', 'import-helpers'],
   settings: {
@@ -24,7 +24,6 @@ module.exports = {
     'prettier/prettier': ['error'],
     'no-use-before-define': 0,
     'space-before-function-paren': 0,
-    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'import-helpers/order-imports': [
       'warn',
       {
