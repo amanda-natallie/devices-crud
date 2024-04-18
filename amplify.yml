@@ -3,7 +3,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - export NODE_OPTIONS=--openssl-legacy-provider && npx pnpm install
+        - export NODE_OPTIONS=--openssl-legacy-provider && npx pnpm install --frozen-lockfile --prod=false
     build:
       commands:
         - npx pnpm run build

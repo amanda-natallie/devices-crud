@@ -24,7 +24,7 @@ jobs:
       - name: Install PNPM and Dependencies
         run: |
           npm install -g pnpm
-          pnpm install
+          pnpm install --frozen-lockfile --prod=false
 
       - name: Build the React App
         run: |

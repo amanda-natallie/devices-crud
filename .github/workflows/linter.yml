@@ -13,6 +13,6 @@ jobs:
         with:
           node-version: 18.x
       - name: Install dependencies
-        run: npm install -g pnpm && pnpm install
+        run: npm install -g pnpm && pnpm install --frozen-lockfile --prod=false
       - name: Run Lint and Format
         run: pnpm lint && pnpm pretty-quick --staged
