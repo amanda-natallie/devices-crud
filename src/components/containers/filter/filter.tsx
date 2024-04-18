@@ -1,4 +1,4 @@
-import { DeviceTypeSelect, SearchInput, SortSelect } from 'components/organisms';
+import { DeviceTypeSelect, SearchInput, SortSelect } from './components';
 
 function Filter() {
   return (

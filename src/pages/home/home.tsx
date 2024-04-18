@@ -1,4 +1,4 @@
-import { Filter, Header, TopSection } from 'components/templates';
+import { Filter, Header, TopSection } from 'components/containers';
 
 function Home() {
   return (
