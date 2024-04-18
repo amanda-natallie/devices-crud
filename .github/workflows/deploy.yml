@@ -1,0 +1,97 @@
+on:
+  workflow_run:
+    workflows: [E2E Tests]
+    types:
+      - completed
+
+name: Build & Deploy
+
+jobs:
+  amplify:
+    name: Deploy to Amplify Console
+    runs-on: ubuntu-latest
+    outputs:
+      env-name: ${{ steps.env-name.outputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install PNPM and Dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install
+
+      - name: Build the React App
+        run: |
+          export NODE_OPTIONS=--openssl-legacy-provider
+          pnpm run build
+
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: built-app
+          path: build/
+
+      - name: Configure AWS credentials
+        id: creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Configure environment name
+        id: env-name
+        run: |
+          ENVIRONMENT=devices-manager
+          echo "Environment name: $ENVIRONMENT"
+          echo "::set-output name=environment::$ENVIRONMENT"
+
+      - name: Check Stack State and Delete if Necessary
+        id: check_stack
+        run: |
+          set +e 
+          STACK_DESC=$(aws cloudformation describe-stacks --stack-name ${{ steps.env-name.outputs.environment }})
+          if [ $? -ne 0 ]; then
+            echo "Stack does not exist or an error occurred. Proceeding without action..."
+          else
+            STACK_STATUS=$(echo "$STACK_DESC" | jq -r '.Stacks[0].StackStatus')
+            echo "Stack Status: $STACK_STATUS"
+            if [[ "$STACK_STATUS" == "ROLLBACK_COMPLETE" ]]; then
+              echo "Stack is in ROLLBACK_COMPLETE state. Proceeding without action..."
+              aws cloudformation delete-stack --stack-name ${{ steps.env-name.outputs.environment }}
+              echo "Waiting for stack to be deleted..."
+              aws cloudformation wait stack-delete-complete --stack-name ${{ steps.env-name.outputs.environment }}
+              echo "Stack deleted."
+            fi
+          fi
+          set -e
+        env:
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          REPO: ${{ github.repository }}
+
+      - name: Deploy to Amplify Console with CloudFormation
+        id: amplify-stack
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: ${{ steps.env-name.outputs.environment }}
+          template: stack.yml
+          no-fail-on-empty-changeset: '1'
+          parameter-overrides: >-
+            Name=${{ steps.env-name.outputs.environment }},
+            Repository=https://github.com/${{ github.repository }},
+            OauthToken=${{ secrets.AMPLIFY_TOKEN }},
+            Domain=${{ secrets.AMPLIFY_DOMAIN }}
+      - name: Print default domain
+        env:
+          DefaultDomain: ${{ steps.amplify-stack.outputs.DefaultDomain }}
+        run: |
+          echo "Default Domain: $DefaultDomain"

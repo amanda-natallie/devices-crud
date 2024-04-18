@@ -1,11 +1,11 @@
 name: E2E Tests
 on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
+  workflow_run:
+    workflows: [Coverage Tests]
+    types:
+      - completed
 jobs:
-  test:
+  e2e:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:

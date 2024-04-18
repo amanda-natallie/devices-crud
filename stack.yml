@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  Name:
+    Type: String
+    Description: Name of the app
+
+  Repository:
+    Type: String
+    Description: GitHub Repository URL
+
+  Branch:
+    Type: String
+    Description: Github Repository Branch
+    Default: master
+
+  OauthToken:
+    Type: String
+    Description: GitHub Repository URL
+    NoEcho: true
+
+  Domain:
+    Type: String
+    Description: Domain name to host application
+    Default: ''
+
+Conditions:
+  UseCustomDomain: !Not [!Equals [!Ref Domain, '']]
+
+Resources:
+  AmplifyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - amplify.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: Amplify
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 'amplify:*'
+                Resource: '*'
+
+  AmplifyApp:
+    Type: 'AWS::Amplify::App'
+    Properties:
+      Name: !Ref Name
+      Repository: !Ref Repository
+      OauthToken: !Ref OauthToken
+      IAMServiceRole: !GetAtt AmplifyRole.Arn
+      EnvironmentVariables:
+        - Name: CI
+          Value: true
+        - Name: NODE_ENV
+          Value: 'production'
+        - Name: REACT_APP_API_URL
+          Value: 'https://devices-manager.vallorisolutions.com'
+      BuildSpec: |
+        version: 1
+        frontend:
+          phases:
+            preBuild:
+              commands:
+                - export NODE_OPTIONS=--openssl-legacy-provider && npx pnpm install
+            build:
+              commands:
+                - npx pnpm run build
+          artifacts:
+            baseDirectory: build
+            files:
+              - '**/*'
+          cache:
+            paths:
+              - node_modules/**/*
+
+  AmplifyBranch:
+    Type: AWS::Amplify::Branch
+    Properties:
+      BranchName: !Ref Branch
+      AppId: !GetAtt AmplifyApp.AppId
+      EnableAutoBuild: true
+
+  AmplifyDomain:
+    Type: AWS::Amplify::Domain
+    Condition: UseCustomDomain
+    Properties:
+      DomainName: !Ref Domain
+      AppId: !GetAtt AmplifyApp.AppId
+      SubDomainSettings:
+        - Prefix: 'devices-manager'
+          BranchName: !GetAtt AmplifyBranch.BranchName
+
+Outputs:
+  DefaultDomain:
+    Value: !GetAtt AmplifyApp.DefaultDomain
+    Condition: UseCustomDomain

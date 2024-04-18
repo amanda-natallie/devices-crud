@@ -1,0 +1,18 @@
+name: Lint and Format Code
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+      - name: Install dependencies
+        run: npm install -g pnpm && pnpm install
+      - name: Run Lint and Format
+        run: pnpm lint && pnpm pretty-quick --staged

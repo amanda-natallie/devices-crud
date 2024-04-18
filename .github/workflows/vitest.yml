@@ -1,11 +1,11 @@
 name: Coverage Tests
 on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
+  workflow_run:
+    workflows: [Lint and Format Code]
+    types:
+      - completed
 jobs:
-  test:
+  coverage:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
