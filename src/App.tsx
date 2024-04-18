@@ -1,34 +1,17 @@
-import { useState } from 'react';
+import { DeviceTypeSelect, SortSelect } from 'components/layout';
 
-import reactLogo from './assets/react.svg';
-import viteLogo from './assets/vite.svg';
-
-import './App.css';
+import './globals.css';
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  const handleClick = () => setCount(prevCount => prevCount + 1);
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <header>
+        <h1>Devices</h1>
+      </header>
+      <div className="flex gap-4">
+        <DeviceTypeSelect />
+        <SortSelect />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button type="button" onClick={handleClick}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
     </>
   );
 }

@@ -23,6 +23,8 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error'],
     'no-use-before-define': 0,
+    'react/jsx-props-no-spreading': 0,
+    'react/prop-types': 0,
     'space-before-function-paren': 0,
     'import-helpers/order-imports': [
       'warn',
@@ -85,7 +87,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'react/require-default-props': 'off',
     'max-params': ['error', 3],
-    '@typescript-eslint/no-shadow': 'error',
     'import/no-relative-parent-imports': 'error',
     'logical-assignment-operators': 'error',
   },
