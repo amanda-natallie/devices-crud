@@ -1,18 +1,11 @@
-import { DeviceTypeSelect, SortSelect } from 'components/layout';
-
+import { HomePage } from 'pages';
 import './globals.css';
 
 function App() {
   return (
-    <>
-      <header>
-        <h1>Devices</h1>
-      </header>
-      <div className="flex gap-4">
-        <DeviceTypeSelect />
-        <SortSelect />
-      </div>
-    </>
+    <div data-testid="app-wrapper">
+      <HomePage />
+    </div>
   );
 }
 

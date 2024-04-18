@@ -1,4 +1,4 @@
-const iconType = {
+export const iconType = {
   chevronDown: 'chevronDown',
   close: 'close',
   linux: 'linux',
@@ -14,6 +14,7 @@ type IconProps = {
   width?: number;
   height?: number;
   color?: string;
+  className?: string;
 };
 
 type IconMapper = {
@@ -21,7 +22,7 @@ type IconMapper = {
 };
 
 function Icon(props: IconProps) {
-  const { name, color, height, width } = props;
+  const { name, color, height, width, className } = props;
   const iconMapper = () => {
     const iconPaths: IconMapper = {
       chevronDown:
@@ -54,6 +55,7 @@ function Icon(props: IconProps) {
       viewBox={`0 0 ${width ?? '16'} ${height ?? '16'}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path data-testid={`icon-svg-path-${name}`} d={d} fill={color ?? '#6E6D7A'} />
     </svg>

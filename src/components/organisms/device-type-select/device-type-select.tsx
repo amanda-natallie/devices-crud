@@ -21,12 +21,16 @@ export function DeviceTypeSelect() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="text-md font-light flex justify-between gap-4">
+        <Button
+          variant="outline"
+          className="flex-auto lg:flex-none text-sm font-light flex justify-between gap-4"
+          data-testid="device-list-wrapper"
+        >
           Device Type: All
           <Icon name="chevronDown" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent>
         {deviceTypeConfig.map(({ id, label, icon }) => (
           <DropdownMenuCheckboxItem
             key={id}

@@ -12,8 +12,17 @@ const config = {
   theme: {
     container: {
       center: true,
-      padding: '2rem',
+      padding: {
+        DEFAULT: '3rem',
+        xs: '0.875rem',
+        sm: '2rem',
+      },
       screens: {
+        xs: '100vw',
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1200px',
         '2xl': '1400px',
       },
     },
@@ -72,6 +81,13 @@ const config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+    },
+    colors: {
+      ninja: {
+        500: '#88859E',
+        900: '#002A42',
+      },
+      white: '#ffffff',
     },
   },
 } satisfies Config;

@@ -10,7 +10,7 @@ const config: ViteConfig = {
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: './src/test/setup.ts',
+    setupFiles: './setupTests.ts',
     root: './src',
     include: ['**/*.test.{ts,tsx}'],
 

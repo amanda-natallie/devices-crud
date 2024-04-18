@@ -1,13 +1,11 @@
-import { render, screen } from 'utils/test';
+import { Helpers, render, screen } from 'utils/test';
 
 import { DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut } from './dropdown-menu';
 
 describe('DropdownMenuLabel', () => {
   it('renders the label correctly', () => {
     render(<DropdownMenuLabel>Label</DropdownMenuLabel>);
-
-    const label = screen.getByText('Label');
-    expect(label).toBeInTheDocument();
+    Helpers.expectText('Label');
   });
   it('renders the label with inset correctly', () => {
     render(<DropdownMenuLabel inset>Label</DropdownMenuLabel>);
@@ -29,8 +27,6 @@ describe('DropdownMenuSeparator', () => {
 describe('DropdownMenuShortcut', () => {
   it('renders the shortcut correctly', () => {
     render(<DropdownMenuShortcut>Shortcut</DropdownMenuShortcut>);
-
-    const shortcut = screen.getByText('Shortcut');
-    expect(shortcut).toBeInTheDocument();
+    Helpers.expectText('Shortcut');
   });
 });

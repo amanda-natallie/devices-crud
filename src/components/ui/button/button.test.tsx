@@ -1,43 +1,37 @@
-import { render, screen } from 'utils/test';
+import { Helpers, render, screen } from 'utils/test';
 
 import { Button } from './button';
 
 describe('Button', () => {
   it('renders the button with default variant and size', () => {
     render(<Button />);
-    const buttonElement = screen.getByRole('button');
-
-    expect(buttonElement).toHaveClass('bg-primary');
-    expect(buttonElement).toHaveClass('text-primary-foreground');
-    expect(buttonElement).toHaveClass('h-10');
-    expect(buttonElement).toHaveClass('px-4');
-    expect(buttonElement).toHaveClass('py-2');
+    Helpers.expectRoleToHaveClasses('button', [
+      'bg-primary',
+      'text-primary-foreground',
+      'h-10',
+      'px-4',
+      'py-2',
+    ]);
   });
 
   it('renders the button with destructive variant', () => {
     render(<Button variant="destructive" />);
-    const buttonElement = screen.getByRole('button');
-
-    expect(buttonElement).toHaveClass('bg-destructive');
-    expect(buttonElement).toHaveClass('text-destructive-foreground');
+    Helpers.expectRoleToHaveClasses('button', ['bg-destructive', 'text-destructive-foreground']);
   });
 
   it('renders the button with outline variant', () => {
     render(<Button variant="outline" />);
-    const buttonElement = screen.getByRole('button');
-
-    expect(buttonElement).toHaveClass('border');
-    expect(buttonElement).toHaveClass('border-input');
-    expect(buttonElement).toHaveClass('bg-background');
+    Helpers.expectRoleToHaveClasses('button', ['bg-background', 'border', 'border-input']);
   });
 
   it('renders the button with disabled state', () => {
     render(<Button disabled />);
-    const buttonElement = screen.getByRole('button');
 
-    expect(buttonElement).toHaveClass('disabled:pointer-events-none');
-    expect(buttonElement).toHaveClass('disabled:opacity-50');
-    expect(buttonElement).toHaveAttribute('disabled');
+    Helpers.expectRoleToHaveClasses('button', [
+      'disabled:pointer-events-none',
+      'disabled:opacity-50',
+    ]);
+    Helpers.expectRoleToHaveAttrs('button', ['disabled']);
   });
 
   it('merge its props onto its immediate child if asChild is true', () => {
