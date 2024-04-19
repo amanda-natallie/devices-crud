@@ -23,6 +23,8 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error'],
     'no-use-before-define': 0,
+    'no-unused-vars': 0,
+    '@typescript-eslint/no-unused-vars': ['error'],
     'react/jsx-props-no-spreading': 0,
     'react/prop-types': 0,
     'space-before-function-paren': 0,
@@ -86,6 +88,12 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'react/require-default-props': 'off',
+    'react/function-component-definition': [
+      0,
+      {
+        unnamedComponents: ['function-expression'],
+      },
+    ],
     'max-params': ['error', 3],
     'import/no-relative-parent-imports': 'error',
     'logical-assignment-operators': 'error',

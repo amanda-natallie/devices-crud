@@ -84,10 +84,19 @@ const config = {
     },
     colors: {
       ninja: {
+        200: '#F4F4F5',
+        250: '#E7E8EB',
+        300: '#E8E8EA',
+        400: '#595766',
         500: '#88859E',
         900: '#002A42',
       },
       white: '#ffffff',
+    },
+  },
+  variants: {
+    extend: {
+      display: ['group-hover'],
     },
   },
 } satisfies Config;

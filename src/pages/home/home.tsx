@@ -1,4 +1,4 @@
-import { Filter, Header, TopSection } from 'components/containers';
+import { Devices, Filter, Header, TopSection } from 'components/containers';
 
 function Home() {
   return (
@@ -7,6 +7,7 @@ function Home() {
       <div className="container">
         <TopSection />
         <Filter />
+        <Devices />
       </div>
     </>
   );
