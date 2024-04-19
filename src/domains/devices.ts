@@ -1,11 +1,13 @@
 import { ReactNode } from 'react';
 
+import { DeviceType, OrderByType } from 'store/types';
+
 export interface DeviceTypeSelect {
-  id: string;
+  id: DeviceType;
   label: string;
   icon: ReactNode;
 }
 
 export type SortSelect = Omit<DeviceTypeSelect, 'icon'> & {
-  sortBy: 'ASC' | 'DESC';
+  sortBy: OrderByType;
 };

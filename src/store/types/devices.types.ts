@@ -19,7 +19,7 @@ export type IPutDeviceResponse = number;
 
 export type OrderByType = 'ASC' | 'DESC' | null;
 export type OrderResultType = 'system_name' | 'hdd_capacity' | null;
-export type DeviceType = 'WINDOWS' | 'MAC' | 'LINUX' | 'tablet' | null;
+export type DeviceType = 'WINDOWS' | 'MAC' | 'LINUX' | 'ALL';
 
 export type DevicesState = {
   devices: IDevice[];
@@ -29,3 +29,5 @@ export type DevicesState = {
   orderResultBy: OrderResultType;
   deviceTypes: DeviceType[];
 };
+
+export const allDeviceTypes: DeviceType[] = ['LINUX', 'MAC', 'WINDOWS'];

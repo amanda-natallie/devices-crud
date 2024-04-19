@@ -1,8 +1,4 @@
-import * as React from 'react';
-
 import { deviceTypeConfig } from 'config/deviceTypeConfig';
-
-import { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu';
 
 import { Button } from 'components/ui/button/button';
 import {
@@ -13,11 +9,10 @@ import {
 } from 'components/ui/dropdown-menu/dropdown-menu';
 import Icon from 'components/ui/icon/icon';
 
-type Checked = DropdownMenuCheckboxItemProps['checked'];
+import useDeviceTypeSelect from './use-device-type-select';
 
 export function DeviceTypeSelect() {
-  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
-
+  const { handleChangeDeviceType, checkSelected, getSelectedDevicesLabel } = useDeviceTypeSelect();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,22 +21,25 @@ export function DeviceTypeSelect() {
           className="flex-auto lg:flex-none text-sm font-light flex justify-between gap-4"
           data-testid="device-list-wrapper"
         >
-          Device Type: All
+          Device Type: {getSelectedDevicesLabel}
           <Icon name="chevronDown" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {deviceTypeConfig.map(({ id, label, icon }) => (
-          <DropdownMenuCheckboxItem
-            key={id}
-            checked={showStatusBar}
-            onCheckedChange={setShowStatusBar}
-            className="flex gap-2 "
-          >
-            {icon}
-            {label}
-          </DropdownMenuCheckboxItem>
-        ))}
+        {deviceTypeConfig.map(({ id, label, icon }) => {
+          const isChecked = checkSelected(id);
+          return (
+            <DropdownMenuCheckboxItem
+              key={id}
+              checked={isChecked}
+              onCheckedChange={checked => handleChangeDeviceType(checked, id)}
+              className="flex gap-2 "
+            >
+              {icon}
+              {label}
+            </DropdownMenuCheckboxItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );
