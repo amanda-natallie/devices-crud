@@ -1,4 +1,4 @@
-import { removeObjectKey } from './common';
+import { removeObjectKey, toCapitalize } from './common';
 
 describe('Common Utils', () => {
   describe('removeObjectKey', () => {
@@ -54,6 +54,22 @@ describe('Common Utils', () => {
 
       const result = removeObjectKey(inputObject, keyToRemove);
       expect(result).toEqual(null);
+    });
+  });
+
+  describe('toCapitalize', () => {
+    it('should capitalize the first letter of a string', () => {
+      const inputString = 'test string';
+      const result = toCapitalize(inputString);
+
+      expect(result).toEqual('Test string');
+    });
+
+    it('should handle an empty string', () => {
+      const inputString = '';
+      const result = toCapitalize(inputString);
+
+      expect(result).toEqual('');
     });
   });
 });

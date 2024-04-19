@@ -12,3 +12,6 @@ export const removeObjectKey = <T extends object, K extends keyof T>(
   }
   return obj;
 };
+
+export const toCapitalize = (str: string): string =>
+  str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();

@@ -1,16 +1,23 @@
+import { IDevice } from 'store/types';
+
 import { ActionsMenu } from 'components/containers/devices/components/actions-menu/actions-menu';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/ui/card/card';
-import Icon from 'components/ui/icon/icon';
+import Icon, { iconType } from 'components/ui/icon/icon';
 
-function DeviceItem() {
+import { toCapitalize } from 'utils/common';
+
+function DeviceItem({ hdd_capacity: hdd, id, system_name: system, type }: IDevice) {
+  const iconName = type.toLowerCase() as keyof typeof iconType;
   return (
-    <Card className="group">
+    <Card className="group" key={id}>
       <CardHeader>
         <CardTitle>
-          <Icon name="windows" color="#595766" />
-          DESKTOP-0VCBIFF
+          <Icon name={iconName} color="#595766" />
+          {system}
         </CardTitle>
-        <CardDescription>Windows workstation - 128 GB</CardDescription>
+        <CardDescription>
+          {toCapitalize(type)} workstation - {hdd} GB
+        </CardDescription>
       </CardHeader>
       <CardContent className="relative">
         <ActionsMenu />

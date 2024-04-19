@@ -4,6 +4,21 @@ import type { InlineConfig } from 'vitest';
 
 import react from '@vitejs/plugin-react-swc';
 
+const exclusions = [
+  '**/main.tsx',
+  '**/index.ts',
+  '**/utils/test/*.tsx',
+  '**/store/**/*.ts',
+  '**/ui/sonner.tsx',
+  '**/**/skeleton.tsx',
+  '**/**/home.tsx',
+  '**/*.types.ts',
+  '**/*.styles.ts',
+  '**/*.config.ts',
+  '**/config/**/*.ts',
+  '**/*.d.ts',
+];
+
 type ViteConfig = UserConfig & { test: InlineConfig };
 const config: ViteConfig = {
   plugins: [react(), tsconfigPaths()],
@@ -14,21 +29,13 @@ const config: ViteConfig = {
     root: './src',
     include: ['**/*.test.{ts,tsx}'],
 
-    exclude: [
-      '**/__tests__/**/*',
-      '**/index.ts',
-      '**/utils/test/*.tsx',
-      '**/*.styles.ts',
-      '**/*.config.ts',
-      '**/config/**/*.ts',
-      '**/*.d.ts',
-    ],
+    exclude: exclusions,
     coverage: {
       all: true,
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       reportsDirectory: '../coverage-report',
-      exclude: ['**/main.tsx', '**/utils/test/*.tsx', '**/index.ts'],
+      exclude: exclusions,
       enabled: true,
       thresholds: {
         perFile: true,

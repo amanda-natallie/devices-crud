@@ -63,6 +63,8 @@ Resources:
           Value: 'production'
         - Name: REACT_APP_API_URL
           Value: 'https://devices-manager.vallorisolutions.com'
+        - Name: REACT_APP_REST_API_URL
+          Value: 'https://devices-api.vallorisolutions.com'
       BuildSpec: |
         version: 1
         frontend:

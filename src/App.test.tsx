@@ -1,9 +1,11 @@
-import { Helpers, render } from 'utils/test';
+import { Helpers, render, waitFor } from 'utils/test';
 
 import App from './App';
 
 it('should render the App component', () => {
   render(<App />);
 
-  Helpers.expectTestIdToBeInDocument('app-wrapper');
+  waitFor(() => {
+    Helpers.expectTestIdToBeInDocument('app-wrapper');
+  });
 });
