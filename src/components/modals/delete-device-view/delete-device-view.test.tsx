@@ -1,13 +1,10 @@
-import { vi } from 'vitest';
-
 import { render } from '@testing-library/react';
 
-import DeleteDeviceModal from './delete-device-modal';
+import DeleteDeviceView from './delete-device-view';
 
-describe('DeleteDeviceModal', () => {
+describe('DeleteDeviceView', () => {
   it('renders correctly and responds to modal toggle', () => {
-    const setIsModalOpen = vi.fn();
-    const { getByText } = render(<DeleteDeviceModal isOpen setIsModalOpen={setIsModalOpen} />);
+    const { getByText } = render(<DeleteDeviceView />);
 
     expect(getByText('Delete device?')).toBeInTheDocument();
     expect(

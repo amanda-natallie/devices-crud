@@ -1,18 +1,27 @@
-import { useState } from 'react';
+import { MODAL_VIEWS_TYPE } from 'store/types';
+
+import { useDevicesActions, useModalActions } from 'hooks';
 
 const useActionsMenu = () => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { setModalView } = useModalActions();
+  const { setSelectedDevice } = useDevicesActions();
 
-  const openEditModal = () => setIsEditModalOpen(true);
-  const openDeleteModal = () => setIsDeleteModalOpen(true);
+  const handleSelectedDevice = (id: string) => {
+    setSelectedDevice(id);
+  };
+
+  const openEditModal = (id: string) => {
+    handleSelectedDevice(id);
+    setModalView(MODAL_VIEWS_TYPE.ADD_EDIT_DEVICE_VIEW);
+  };
+
+  const openDeleteModal = (id: string) => {
+    handleSelectedDevice(id);
+    setModalView(MODAL_VIEWS_TYPE.DELETE_DEVICE_VIEW);
+  };
   return {
-    isEditModalOpen,
-    isDeleteModalOpen,
     openEditModal,
     openDeleteModal,
-    setIsEditModalOpen,
-    setIsDeleteModalOpen,
   };
 };
 

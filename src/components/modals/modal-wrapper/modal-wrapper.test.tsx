@@ -8,12 +8,9 @@ describe('ModalWrapper', () => {
   it('renders correctly and responds to button clicks', () => {
     const primaryOnClick = vi.fn();
     const secondaryOnClick = vi.fn();
-    const onOpenChange = vi.fn();
 
     const { getByText } = render(
       <ModalWrapper
-        open
-        onOpenChange={onOpenChange}
         title="Test Modal"
         actions={{
           primary: { onClick: primaryOnClick },

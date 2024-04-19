@@ -17,10 +17,15 @@ export type IPutDevicePayload = IDevice;
 
 export type IPutDeviceResponse = number;
 
+export type OrderByType = 'ASC' | 'DESC' | null;
+export type OrderResultType = 'system_name' | 'hdd_capacity' | null;
+export type DeviceType = 'WINDOWS' | 'MAC' | 'LINUX' | 'tablet' | null;
+
 export type DevicesState = {
   devices: IDevice[];
   filteredDevices: IDevice[];
-  selectedDevice: IDevice | null;
-  orderBy: string;
-  deviceTypes: string[];
+  selectedDevice: string | null;
+  orderBy: OrderByType;
+  orderResultBy: OrderResultType;
+  deviceTypes: DeviceType[];
 };

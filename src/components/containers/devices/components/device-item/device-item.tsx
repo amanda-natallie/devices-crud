@@ -20,7 +20,7 @@ function DeviceItem({ hdd_capacity: hdd, id, system_name: system, type }: IDevic
         </CardDescription>
       </CardHeader>
       <CardContent className="relative">
-        <ActionsMenu />
+        <ActionsMenu {...{ id }} />
       </CardContent>
     </Card>
   );

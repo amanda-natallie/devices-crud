@@ -1,4 +1,3 @@
-import { AddEditDeviceModal, DeleteDeviceModal } from 'components/modals';
 import { Button } from 'components/ui/button/button';
 import {
   DropdownMenu,
@@ -10,35 +9,28 @@ import Icon from 'components/ui/icon/icon';
 
 import useActionsMenu from './use-actions-menu';
 
-export function ActionsMenu() {
-  const {
-    isEditModalOpen,
-    isDeleteModalOpen,
-    openEditModal,
-    openDeleteModal,
-    setIsEditModalOpen,
-    setIsDeleteModalOpen,
-  } = useActionsMenu();
+interface ActionsMenuProps {
+  id: string;
+}
+
+export function ActionsMenu({ id }: ActionsMenuProps) {
+  const { openEditModal, openDeleteModal } = useActionsMenu();
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" data-testid="options-menu-trigger">
-            <Icon name="options" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem onClick={openEditModal}>Edit</DropdownMenuItem>
-          <DropdownMenuItem
-            className="text-destructive hover:text-destructive/80"
-            onClick={openDeleteModal}
-          >
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <AddEditDeviceModal isOpen={isEditModalOpen} setIsModalOpen={setIsEditModalOpen} />
-      <DeleteDeviceModal isOpen={isDeleteModalOpen} setIsModalOpen={setIsDeleteModalOpen} />
-    </>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" data-testid="options-menu-trigger">
+          <Icon name="options" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem onClick={() => openEditModal(id)}>Edit</DropdownMenuItem>
+        <DropdownMenuItem
+          className="text-destructive hover:text-destructive/80"
+          onClick={() => openDeleteModal(id)}
+        >
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

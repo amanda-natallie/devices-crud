@@ -1,13 +1,10 @@
-import { vi } from 'vitest';
-
 import { render } from 'utils/test';
 
-import AddEditDeviceModal from './add-edit-device-modal';
+import AddEditDeviceView from './add-edit-device-view';
 
-describe('AddEditDeviceModal', () => {
+describe('AddEditDeviceView', () => {
   it('renders correctly and responds to modal toggle', () => {
-    const setIsModalOpen = vi.fn();
-    const { getByText } = render(<AddEditDeviceModal isOpen setIsModalOpen={setIsModalOpen} />);
+    const { getByText } = render(<AddEditDeviceView />);
 
     expect(getByText('Add/Edit Device')).toBeInTheDocument();
     expect(getByText('Device Name')).toBeInTheDocument();

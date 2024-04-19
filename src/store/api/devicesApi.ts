@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
-import { setDevices, setSelectedDevice } from 'store/slices';
-import { closeModal } from 'store/slices/modalsSlice';
+import { setDevicesAction, setSelectedDeviceAction } from 'store/slices';
+import { closeModalAction } from 'store/slices/modalsSlice';
 import {
   IGetDeviceByIdResponse,
   IGetDevicesResponse,
@@ -18,7 +18,7 @@ export const devicesApi = publicAPI.injectEndpoints({
       query: () => '/devices',
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled;
-        dispatch(setDevices(data));
+        dispatch(setDevicesAction(data));
       },
       providesTags: ['GetDevices'],
     }),
@@ -35,7 +35,7 @@ export const devicesApi = publicAPI.injectEndpoints({
         const {
           data: { hdd_capacity: hdd, system_name: system, type },
         } = await queryFulfilled;
-        dispatch(closeModal());
+        dispatch(closeModalAction());
         toast('Successfully created new device.', {
           description: `Device: ${system}, Type: ${type}, HDD Capacity: ${hdd}`,
         });
@@ -50,8 +50,8 @@ export const devicesApi = publicAPI.injectEndpoints({
       }),
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(setSelectedDevice(null));
-        dispatch(closeModal());
+        dispatch(setSelectedDeviceAction(null));
+        dispatch(closeModalAction());
         toast('Device updated successfully.');
       },
       invalidatesTags: ['GetDevices'],
@@ -63,8 +63,8 @@ export const devicesApi = publicAPI.injectEndpoints({
       }),
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(setSelectedDevice(null));
-        dispatch(closeModal());
+        dispatch(setSelectedDeviceAction(null));
+        dispatch(closeModalAction());
         toast('Device deleted successfully.');
       },
       invalidatesTags: ['GetDevices'],

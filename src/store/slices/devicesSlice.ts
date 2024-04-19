@@ -1,4 +1,4 @@
-import { DevicesState, IDevice } from 'store/types';
+import { DevicesState, DeviceType, IDevice, OrderByType, OrderResultType } from 'store/types';
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -6,7 +6,8 @@ const initialState: DevicesState = {
   devices: [],
   filteredDevices: [],
   selectedDevice: null,
-  orderBy: 'system_name',
+  orderBy: 'ASC',
+  orderResultBy: 'system_name',
   deviceTypes: [],
 };
 
@@ -14,20 +15,27 @@ export const devicesSlice = createSlice({
   initialState,
   name: 'devicesSlice',
   reducers: {
-    resetDevicesInfo: () => initialState,
-    setDevices: (state, action: PayloadAction<IDevice[]>) => {
+    resetDevicesInfoAction: state => ({
+      ...initialState,
+      devices: state.devices,
+      filteredDevices: state.devices,
+    }),
+    setDevicesAction: (state, action: PayloadAction<IDevice[]>) => {
       state.devices = action.payload;
     },
-    setFilteredDevices: (state, action: PayloadAction<IDevice[]>) => {
+    setFilteredDevicesAction: (state, action: PayloadAction<IDevice[]>) => {
       state.filteredDevices = action.payload;
     },
-    setSelectedDevice: (state, action: PayloadAction<IDevice | null>) => {
+    setSelectedDeviceAction: (state, action: PayloadAction<string | null>) => {
       state.selectedDevice = action.payload;
     },
-    setOrderBy: (state, action: PayloadAction<string>) => {
+    setOrderByAction: (state, action: PayloadAction<OrderByType>) => {
       state.orderBy = action.payload;
     },
-    setDeviceTypes: (state, action: PayloadAction<string[]>) => {
+    setOrderByResultAction: (state, action: PayloadAction<OrderResultType>) => {
+      state.orderResultBy = action.payload;
+    },
+    setDeviceTypesAction: (state, action: PayloadAction<DeviceType[]>) => {
       state.deviceTypes = action.payload;
     },
   },
@@ -36,10 +44,11 @@ export const devicesSlice = createSlice({
 export default devicesSlice.reducer;
 
 export const {
-  resetDevicesInfo,
-  setDeviceTypes,
-  setDevices,
-  setFilteredDevices,
-  setSelectedDevice,
-  setOrderBy,
+  resetDevicesInfoAction,
+  setDeviceTypesAction,
+  setDevicesAction,
+  setFilteredDevicesAction,
+  setSelectedDeviceAction,
+  setOrderByAction,
+  setOrderByResultAction,
 } = devicesSlice.actions;

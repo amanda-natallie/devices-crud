@@ -11,14 +11,14 @@ export const modalsSlice = createSlice({
   initialState,
   name: 'modalsSlice',
   reducers: {
-    resetModalsInfo: () => initialState,
-    setModalView: (state, action: PayloadAction<keyof MODAL_VIEWS_TYPE>) => {
+    resetModalsInfoAction: () => initialState,
+    setModalViewAction: (state, action: PayloadAction<keyof typeof MODAL_VIEWS_TYPE>) => {
       state.modalView = action.payload;
     },
-    openModal: state => {
+    openModalAction: state => {
       state.displayModal = true;
     },
-    closeModal: state => {
+    closeModalAction: state => {
       state.displayModal = false;
     },
   },
@@ -26,4 +26,5 @@ export const modalsSlice = createSlice({
 
 export default modalsSlice.reducer;
 
-export const { resetModalsInfo, openModal, closeModal } = modalsSlice.actions;
+export const { resetModalsInfoAction, openModalAction, closeModalAction, setModalViewAction } =
+  modalsSlice.actions;

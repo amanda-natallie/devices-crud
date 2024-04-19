@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { MODAL_VIEWS_TYPE } from 'store/types';
+
+import { useModalActions } from 'hooks';
 
 const useTopSection = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleOpenModal = () => setIsModalOpen(true);
+  const { setModalView } = useModalActions();
+  const handleOpenModal = () => {
+    setModalView(MODAL_VIEWS_TYPE.ADD_EDIT_DEVICE_VIEW);
+  };
   return {
-    isModalOpen,
-    setIsModalOpen,
     handleOpenModal,
   };
 };

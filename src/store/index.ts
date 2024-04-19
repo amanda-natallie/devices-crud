@@ -3,11 +3,12 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { publicAPI } from './api';
-import { devicesReducer } from './slices';
+import { devicesReducer, modalsReducer } from './slices';
 
 const rootReducer = combineReducers({
   [publicAPI.reducerPath]: publicAPI.reducer,
   devicesState: devicesReducer,
+  modalsState: modalsReducer,
 });
 
 export const store = configureStore({
