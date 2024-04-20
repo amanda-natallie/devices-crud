@@ -12,6 +12,7 @@ import devicesReducer, {
   setSelectedDeviceAction,
 } from './devicesSlice';
 
+const payload = { id: '1', system_name: 'Device 1', type: 'WINDOWS', hdd_capacity: 100 };
 describe('devicesSlice', () => {
   let initialState: DevicesState;
 
@@ -28,13 +29,13 @@ describe('devicesSlice', () => {
   });
 
   it('should return the initial state', () => {
-    expect(devicesReducer(undefined, { type: undefined })).toEqual(initialState);
+    expect(devicesReducer(undefined, { type: '' })).toEqual(initialState);
   });
 
   it('should handle resetting devices information', () => {
     const previousState: DevicesState = {
       ...initialState,
-      devices: [{ id: '1', label: 'TestDevice' }],
+      devices: [payload],
     };
 
     const newState = devicesReducer(previousState, resetDevicesInfoAction());
@@ -43,7 +44,7 @@ describe('devicesSlice', () => {
   });
 
   it('should handle setting devices', () => {
-    const newDevices: IDevice[] = [{ id: '1', label: 'Device 1' }];
+    const newDevices: IDevice[] = [payload];
 
     const newState = devicesReducer(initialState, setDevicesAction(newDevices));
 
@@ -67,7 +68,7 @@ describe('devicesSlice', () => {
   });
 
   it('should handle setting order result by', () => {
-    const newOrderResultBy = 'type';
+    const newOrderResultBy = 'hdd_capacity';
 
     const newState = devicesReducer(initialState, setOrderByResultAction(newOrderResultBy));
 
@@ -100,6 +101,4 @@ describe('devicesSlice', () => {
 
     expect(newState.preDebounceSearchValue).toBe(newPreDebounceSearchValue);
   });
-
-  // Add more tests as needed for the slice
 });

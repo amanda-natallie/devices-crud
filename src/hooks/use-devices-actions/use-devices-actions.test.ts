@@ -11,7 +11,7 @@ vi.mock('store');
 describe('useDevicesActions', () => {
   const mockDispatch = vi.fn();
   beforeEach(() => {
-    (useAppDispatch as vi.Mock).mockReturnValue(mockDispatch);
+    (useAppDispatch as jest.Mock).mockReturnValue(mockDispatch);
   });
 
   it('should dispatch resetDevicesInfoAction when resetDevicesInfo is called', () => {

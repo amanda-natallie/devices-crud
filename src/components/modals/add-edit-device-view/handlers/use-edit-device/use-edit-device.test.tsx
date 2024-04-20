@@ -96,7 +96,7 @@ describe('useEditDevice', () => {
         data: { id: '1', system_name: 'Test System', type: 'server', hdd_capacity: 100 },
       },
     ]);
-    renderWithProviders(wrapper);
+    renderWithProviders(wrapper as unknown as ReactNode);
     const { result: hookResult } = renderHook(() => useEditDevice(), { wrapper });
     result = hookResult;
   });

@@ -79,7 +79,7 @@ describe('useAddDevice', () => {
         error: null,
       },
     ]);
-    renderWithProviders(wrapper);
+    renderWithProviders(wrapper as unknown as ReactNode);
     const { result: hookResult } = renderHook(() => useAddDevice(), { wrapper });
     result = hookResult;
   });
