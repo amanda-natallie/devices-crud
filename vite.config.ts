@@ -31,6 +31,7 @@ const config: ViteConfig = {
 
     exclude: exclusions,
     coverage: {
+      reportOnFailure: true,
       all: true,
       provider: 'v8',
       reporter: ['text', 'json', 'html'],

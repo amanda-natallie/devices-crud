@@ -1,4 +1,6 @@
-import { removeObjectKey, toCapitalize } from './common';
+import { vi } from 'vitest';
+
+import { debounce, removeObjectKey, toCapitalize } from './common';
 
 describe('Common Utils', () => {
   describe('removeObjectKey', () => {
@@ -71,5 +73,49 @@ describe('Common Utils', () => {
 
       expect(result).toEqual('');
     });
+  });
+});
+describe('debounce', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  it('should debounce the callback function', () => {
+    const callback = vi.fn();
+    const wait = 1000;
+    const debouncedCallback = debounce(callback, wait);
+
+    debouncedCallback('test');
+
+    expect(callback).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(wait);
+
+    expect(callback).toHaveBeenCalledWith('test');
+  });
+
+  it('should cancel the debounced callback', () => {
+    const callback = vi.fn();
+    const wait = 1000;
+    const debouncedCallback = debounce(callback, wait);
+
+    debouncedCallback('test');
+    debouncedCallback.cancel();
+
+    vi.advanceTimersByTime(wait);
+
+    expect(callback).not.toHaveBeenCalled();
+  });
+  it('should clear the timer if the debounced function is called again', () => {
+    const callback = vi.fn();
+    const wait = 1000;
+    const debouncedCallback = debounce(callback, wait);
+
+    debouncedCallback('test');
+    vi.advanceTimersByTime(wait / 2);
+    debouncedCallback('test2');
+
+    vi.advanceTimersByTime(wait);
+
+    expect(callback).toHaveBeenCalledWith('test2');
   });
 });

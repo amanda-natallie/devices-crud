@@ -28,6 +28,7 @@ export type DevicesState = {
   orderBy: OrderByType;
   orderResultBy: OrderResultType;
   deviceTypes: DeviceType[];
+  searchValue: string;
 };
 
 export const allDeviceTypes: DeviceType[] = ['LINUX', 'MAC', 'WINDOWS'];

@@ -15,3 +15,24 @@ export const removeObjectKey = <T extends object, K extends keyof T>(
 
 export const toCapitalize = (str: string): string =>
   str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
+export const debounce = <T extends string>(callback: (args: T) => void, wait: number) => {
+  let timer: NodeJS.Timeout | null = null;
+
+  const debounced = (args: T) => {
+    if (timer !== null) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      callback(args);
+    }, wait);
+  };
+
+  debounced.cancel = () => {
+    if (timer !== null) {
+      clearTimeout(timer);
+    }
+  };
+
+  return debounced;
+};

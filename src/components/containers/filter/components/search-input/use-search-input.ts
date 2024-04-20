@@ -1,13 +1,38 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+
+import { useDevicesActions } from 'hooks';
+
+import { debounce } from 'utils/common';
+
+const DELAY = 500;
 
 const useSearchInput = () => {
-  const [search, setSearch] = useState('');
+  const { setSearchValue } = useDevicesActions();
+  const [query, setQuery] = useState('');
+
+  const debouncedUpdateRef = useRef<ReturnType<typeof debounce> | null>(null);
+
+  if (!debouncedUpdateRef.current) {
+    debouncedUpdateRef.current = debounce((searchQuery: string) => {
+      setSearchValue(searchQuery);
+    }, DELAY);
+  }
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+    const { value } = e.target;
+    setQuery(value);
+    debouncedUpdateRef.current?.(value);
   };
+
+  useEffect(
+    () => () => {
+      debouncedUpdateRef.current?.cancel();
+    },
+    [],
+  );
+
   return {
-    search,
+    query,
     handleSearch,
   };
 };

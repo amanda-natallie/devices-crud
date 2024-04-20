@@ -5,6 +5,7 @@ import {
   setFilteredDevicesAction,
   setOrderByAction,
   setOrderByResultAction,
+  setSearchValueAction,
   setSelectedDeviceAction,
 } from 'store/slices/devicesSlice';
 import { DeviceType, IDevice, OrderByType, OrderResultType } from 'store/types';
@@ -36,6 +37,10 @@ const useDevicesActions = () => {
     dispatch(setDeviceTypesAction(payload));
   };
 
+  const setSearchValue = (payload: string) => {
+    dispatch(setSearchValueAction(payload));
+  };
+
   return {
     resetDevicesInfo,
     setFilteredDevices,
@@ -43,6 +48,7 @@ const useDevicesActions = () => {
     setOrderBy,
     setOrderByResult,
     setDeviceTypes,
+    setSearchValue,
   };
 };
 
