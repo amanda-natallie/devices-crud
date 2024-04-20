@@ -1,7 +1,7 @@
 import { useAppSelector } from 'store';
 import { MODAL_VIEWS_TYPE } from 'types';
 
-import { Dialog } from 'components/ui/dialog/dialog';
+import { Dialog } from 'components/ui/dialog';
 
 import { useModalActions } from 'hooks';
 

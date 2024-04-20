@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Icon, { iconType } from 'components/ui/icon/icon';
+import Icon, { iconType } from 'components/ui/icon';
 
 import { cn } from 'utils/lib/tailwind';
 

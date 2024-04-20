@@ -1,14 +1,14 @@
 import { sortSelectConfig } from 'config/sortSelectConfig';
 
-import { Button } from 'components/ui/button/button';
+import { Button } from 'components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from 'components/ui/dropdown-menu/dropdown-menu';
-import Icon from 'components/ui/icon/icon';
+} from 'components/ui/dropdown-menu';
+import Icon from 'components/ui/icon';
 
 import useSortSelect from './use-sort-select';
 

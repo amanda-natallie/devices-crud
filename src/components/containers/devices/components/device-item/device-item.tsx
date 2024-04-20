@@ -1,8 +1,8 @@
 import { IDevice } from 'types';
 
 import { ActionsMenu } from 'components/containers/devices/components/actions-menu/actions-menu';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/ui/card/card';
-import Icon, { iconType } from 'components/ui/icon/icon';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/ui/card';
+import Icon, { iconType } from 'components/ui/icon';
 
 import { toCapitalize } from 'utils/common';
 

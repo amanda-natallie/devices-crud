@@ -1,11 +1,11 @@
-import { Button } from 'components/ui/button/button';
+import { Button } from 'components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'components/ui/dropdown-menu/dropdown-menu';
-import Icon from 'components/ui/icon/icon';
+} from 'components/ui/dropdown-menu';
+import Icon from 'components/ui/icon';
 
 import useActionsMenu from './use-actions-menu';
 

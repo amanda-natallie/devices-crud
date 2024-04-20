@@ -63,6 +63,7 @@ const useDeviceTypeSelect = () => {
     handleChangeDeviceType,
     checkSelected,
     getSelectedDevicesLabel,
+    isAllIncluded,
   };
 };
 

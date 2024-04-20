@@ -1,6 +1,6 @@
 import { DeviceTypeSelect } from 'types';
 
-import Icon from 'components/ui/icon/icon';
+import Icon from 'components/ui/icon';
 
 export const deviceTypeConfig: DeviceTypeSelect[] = [
   {

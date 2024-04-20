@@ -1,38 +1,51 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, ReactNode } from 'react';
+import { Provider } from 'react-redux';
 
-import { act, render, renderHook, screen, userEvent, waitFor } from 'utils/test';
+import { store } from 'store';
+import { vi } from 'vitest';
 
-import { SearchInput } from './search-input';
+import { act, renderHook, waitFor } from 'utils/test';
+
 import useSearchInput from './use-search-input';
 
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <Provider store={store}>{children}</Provider>
+);
+
 describe('useSearchInput', () => {
-  it('should initialize with the first sort configuration', () => {
-    const { result } = renderHook(() => useSearchInput());
-
-    expect(result.current.search).toEqual('');
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useFakeTimers();
   });
 
-  it('should set the input value when typing', async () => {
-    renderHook(() => useSearchInput());
-    render(<SearchInput />);
-    const input = screen.getByTestId('input-element');
+  it('should debounce the setSearchValue calls', async () => {
+    const setSearchValueMock = vi.fn();
+    vi.mock('hooks/useDevicesActions', () => ({
+      useDevicesActions: () => ({
+        setSearchValue: setSearchValueMock,
+      }),
+    }));
+
+    const { result } = renderHook(() => useSearchInput(), { wrapper });
     act(() => {
-      userEvent.type(input, 'hdd');
+      result.current.handleSearch({ target: { value: 'hdd' } } as ChangeEvent<HTMLInputElement>);
+      result.current.handleSearch({ target: { value: 'hdd s' } } as ChangeEvent<HTMLInputElement>);
     });
 
-    await waitFor(() => {
-      expect(input).toHaveValue('hdd');
-    });
+    waitFor(() => expect(setSearchValueMock).not.toHaveBeenCalled());
+    vi.advanceTimersByTime(500);
+    waitFor(() => expect(setSearchValueMock).toHaveBeenCalledWith('hdd s'));
   });
-  it('should call setSearch with the correct argument when handleSearch is called', async () => {
-    const { result } = renderHook(() => useSearchInput());
-    act(() =>
-      result.current.handleSearch({ target: { value: 'hdd' } } as ChangeEvent<HTMLInputElement>),
-    );
 
-    await waitFor(() => {
-      expect(result.current.handleSearch).toBeDefined();
-      expect(result.current.search).toEqual('hdd');
+  it('should cancel debounce on component unmount', async () => {
+    const setSearchValueMock = vi.fn();
+    const { result, unmount } = renderHook(() => useSearchInput(), { wrapper });
+
+    act(() => {
+      result.current.handleSearch({ target: { value: 'hdd' } } as ChangeEvent<HTMLInputElement>);
     });
+    unmount();
+    vi.advanceTimersByTime(500);
+    waitFor(() => expect(setSearchValueMock).not.toHaveBeenCalled());
   });
 });

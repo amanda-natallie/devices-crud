@@ -1,13 +1,13 @@
 import { deviceTypeConfig } from 'config/deviceTypeConfig';
 
-import { Button } from 'components/ui/button/button';
+import { Button } from 'components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from 'components/ui/dropdown-menu/dropdown-menu';
-import Icon from 'components/ui/icon/icon';
+} from 'components/ui/dropdown-menu';
+import Icon from 'components/ui/icon';
 
 import useDeviceTypeSelect from './use-device-type-select';
 

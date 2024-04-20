@@ -22,6 +22,7 @@ const useActionsMenu = (id: string) => {
   return {
     openEditModal,
     openDeleteModal,
+    handleSelectedDevice,
   };
 };
 

@@ -1,12 +1,7 @@
 import { deviceTypeConfig } from 'config/deviceTypeConfig';
 
 import { Button } from 'components/ui/button';
-import {
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from 'components/ui/dialog/dialog';
+import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from 'components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'components/ui/form';
 import { Input } from 'components/ui/input';
 import {

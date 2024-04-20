@@ -1,5 +1,5 @@
 import { Button } from 'components/ui/button';
-import Icon from 'components/ui/icon/icon';
+import Icon from 'components/ui/icon';
 
 import useTopSection from './use-top-section';
 

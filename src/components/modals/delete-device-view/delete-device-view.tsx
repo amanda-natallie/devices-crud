@@ -1,10 +1,5 @@
 import { Button } from 'components/ui/button';
-import {
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from 'components/ui/dialog/dialog';
+import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from 'components/ui/dialog';
 
 import { DeleteModalSkeleton } from './skeleton';
 import useDeleteDeviceView from './use-delete-device-view';
