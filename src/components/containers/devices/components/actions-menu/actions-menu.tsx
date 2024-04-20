@@ -14,7 +14,7 @@ interface ActionsMenuProps {
 }
 
 export function ActionsMenu({ id }: ActionsMenuProps) {
-  const { openEditModal, openDeleteModal } = useActionsMenu();
+  const { openEditModal, openDeleteModal } = useActionsMenu(id);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -23,10 +23,10 @@ export function ActionsMenu({ id }: ActionsMenuProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem onClick={() => openEditModal(id)}>Edit</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => openEditModal()}>Edit</DropdownMenuItem>
         <DropdownMenuItem
           className="text-destructive hover:text-destructive/80"
-          onClick={() => openDeleteModal(id)}
+          onClick={() => openDeleteModal()}
         >
           Delete
         </DropdownMenuItem>
