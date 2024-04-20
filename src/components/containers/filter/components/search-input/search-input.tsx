@@ -7,7 +7,13 @@ export function SearchInput() {
 
   return (
     <div className="flex flex-col w-full lg:w-[270px]" data-testid="search-input-wrapper">
-      <Input icon="search" onChange={handleSearch} value={query} placeholder="Search" />
+      <Input
+        icon="search"
+        onChange={handleSearch}
+        value={query}
+        placeholder="Search"
+        id="search-devices"
+      />
     </div>
   );
 }

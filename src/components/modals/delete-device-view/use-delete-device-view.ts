@@ -1,10 +1,8 @@
-import { ModalWrapperProps } from 'components/modals/modal-wrapper/modal-wrapper';
-
 import { useModalActions } from 'hooks';
 
 const useDeleteDeviceView = () => {
   const { closeModal } = useModalActions();
-  const actions: ModalWrapperProps['actions'] = {
+  const actions = {
     primary: {
       onClick: () => closeModal(),
     },

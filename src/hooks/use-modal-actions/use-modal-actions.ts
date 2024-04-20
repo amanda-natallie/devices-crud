@@ -6,11 +6,15 @@ import {
 } from 'store/slices/modalsSlice';
 import { MODAL_VIEWS_TYPE } from 'types';
 
+import useDevicesActions from 'hooks/use-devices-actions/use-devices-actions';
+
 const useModalActions = () => {
+  const { setSelectedDevice } = useDevicesActions();
   const dispatch = useAppDispatch();
 
   const closeModal = () => {
     dispatch(resetModalsInfoAction());
+    setSelectedDevice(null);
   };
 
   const openModal = () => {

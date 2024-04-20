@@ -21,7 +21,7 @@ const useDevicesActions = () => {
     dispatch(setFilteredDevicesAction(payload));
   };
 
-  const setSelectedDevice = (payload: string) => {
+  const setSelectedDevice = (payload: string | null) => {
     dispatch(setSelectedDeviceAction(payload));
   };
 
