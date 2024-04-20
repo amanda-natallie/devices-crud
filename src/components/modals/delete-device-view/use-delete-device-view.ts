@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 
 import { toast } from 'sonner';
 import { useAppSelector } from 'store';
+import { useDeleteDeviceMutation } from 'store/api';
 import { IDevice } from 'types';
 
 import { useModalActions } from 'hooks';
 
 const useDeleteDeviceView = () => {
+  const [deleteDevice, { isLoading }] = useDeleteDeviceMutation();
   const { closeModal } = useModalActions();
   const [deviceFromStore, setSeviceFromStore] = useState<IDevice | undefined>(undefined);
   const { selectedDevice, devices } = useAppSelector(state => state.devicesState);
@@ -22,8 +24,16 @@ const useDeleteDeviceView = () => {
     }
   }, [deviceFromStore, devices, selectedDevice]);
 
+  const handleDeleteDevice = async () => {
+    if (deviceFromStore) {
+      await deleteDevice(deviceFromStore.id);
+      closeModal();
+      toast(`Device ${deviceFromStore.system_name} deleted successfully.`);
+    }
+  };
+
   const onSubmit = () => {
-    toast(`You submitted the following values: ${JSON.stringify(deviceFromStore, null, 2)}`);
+    handleDeleteDevice();
   };
 
   const actions = {
@@ -40,6 +50,7 @@ const useDeleteDeviceView = () => {
     actions,
     deviceName: deviceFromStore?.system_name,
     isLoading: !deviceFromStore,
+    isSubmitting: isLoading,
   };
 };
 

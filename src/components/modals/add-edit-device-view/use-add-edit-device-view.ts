@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { toast } from 'sonner';
 import { useAppSelector } from 'store';
-import { useLazyGetDeviceByIdQuery } from 'store/api';
+import { useLazyGetDeviceByIdQuery, usePostDeviceMutation, usePutDeviceMutation } from 'store/api';
 import { IDevice } from 'types';
 import { z } from 'zod';
 
@@ -15,6 +15,14 @@ type OnCLick = () => void | SubmitHandler<IDevice>;
 
 const useAddEditDeviceView = () => {
   const [getById, getByIdState] = useLazyGetDeviceByIdQuery();
+  const [
+    addDevice,
+    { isLoading: isAddLoading, isSuccess: isAddSuccess, isError: isAddError, error: addError },
+  ] = usePostDeviceMutation();
+  const [
+    editDevice,
+    { isLoading: isEditLoading, isSuccess: isEditSuccess, isError: isEditError, error: editError },
+  ] = usePutDeviceMutation();
   const [deviceFromAPI, setDeviceFromAPI] = useState<IDevice | undefined>(undefined);
   const { selectedDevice } = useAppSelector(state => state.devicesState);
   const { closeModal } = useModalActions();
@@ -28,10 +36,10 @@ const useAddEditDeviceView = () => {
       setDeviceFromAPI(data);
     };
 
-    if (isEdit) {
+    if (isEdit || (isEdit && getByIdState.isSuccess && !getByIdState.data)) {
       getDeviceById(selectedDevice);
     }
-  }, [getById, isEdit, selectedDevice]);
+  }, [getById, getByIdState.data, getByIdState.isSuccess, isEdit, selectedDevice]);
 
   const schema = z.object({
     id: z.string().optional(),
@@ -75,11 +83,60 @@ const useAddEditDeviceView = () => {
     }
   }, [deviceFromAPI, formMethods, isEdit]);
 
-  const onSubmit = (data: z.infer<typeof schema>) => {
-    toast(`You submitted the following values: ${JSON.stringify(data, null, 2)}`);
+  const handleAfterSubmit = useCallback(
+    (systemName: string) => {
+      closeModal();
+      setSelectedDevice(null);
+      setDeviceFromAPI(undefined);
+      toast(`The devices list was successfully updated with device ${systemName}`);
+    },
+    [closeModal, setSelectedDevice, setDeviceFromAPI],
+  );
+
+  const handleAfterError = useCallback(() => {
+    toast(
+      `An error occurred while trying to ${isEdit ? 'update' : 'create'} the device. Error: ${addError || editError}`,
+    );
+  }, [addError, editError, isEdit]);
+
+  const handleAddDevice = async (data: z.infer<typeof schema>) => {
+    await addDevice(data);
   };
+
+  const handleEditDevice = async (data: z.infer<typeof schema>) => {
+    await editDevice({
+      ...data,
+      id: deviceFromAPI!.id,
+    });
+  };
+
+  const onSubmit = (data: z.infer<typeof schema>) => {
+    if (isEdit) {
+      handleEditDevice(data);
+    } else {
+      handleAddDevice(data);
+    }
+  };
+
+  useEffect(() => {
+    if (isAddSuccess || isEditSuccess) {
+      handleAfterSubmit(formMethods.getValues().system_name);
+    }
+    if (isAddError || isEditError) {
+      handleAfterError();
+    }
+  }, [
+    isAddSuccess,
+    formMethods,
+    isEditSuccess,
+    handleAfterSubmit,
+    isAddError,
+    isEditError,
+    handleAfterError,
+  ]);
+
   const { isFetching } = getByIdState;
-  const isSubmitting = false;
+  const isSubmitting = isAddLoading || isEditLoading;
   const shouldDisableButtons = isSubmitting || isFetching;
 
   const actions = {

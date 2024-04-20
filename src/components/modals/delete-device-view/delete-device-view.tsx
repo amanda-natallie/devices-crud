@@ -10,7 +10,7 @@ import { DeleteModalSkeleton } from './skeleton';
 import useDeleteDeviceView from './use-delete-device-view';
 
 function DeleteDeviceView() {
-  const { actions, deviceName, isLoading } = useDeleteDeviceView();
+  const { actions, deviceName, isLoading, isSubmitting } = useDeleteDeviceView();
   const { primary, secondary } = actions;
 
   return (
@@ -28,10 +28,20 @@ function DeleteDeviceView() {
             </p>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={primary.onClick}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={primary.onClick}
+              disabled={isSubmitting}
+            >
               Cancel
             </Button>
-            <Button type="submit" onClick={secondary.onClick} variant="destructive">
+            <Button
+              type="button"
+              onClick={secondary.onClick}
+              variant="destructive"
+              loading={isSubmitting}
+            >
               {secondary.label}
             </Button>
           </DialogFooter>

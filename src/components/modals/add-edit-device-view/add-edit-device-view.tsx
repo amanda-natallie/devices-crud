@@ -21,7 +21,8 @@ import { DevicesModalSkeleton } from './skeleton';
 import useAddEditDeviceView from './use-add-edit-device-view';
 
 function AddEditDeviceView() {
-  const { actions, isEdit, formMethods, isFetching, onSubmit } = useAddEditDeviceView();
+  const { actions, isEdit, formMethods, isFetching, isSubmitting, onSubmit } =
+    useAddEditDeviceView();
   const selectItems = deviceTypeConfig.filter(({ id }) => id !== 'ALL');
   const { primary, secondary } = actions;
 
@@ -49,6 +50,7 @@ function AddEditDeviceView() {
                         {...field}
                         onChange={event => field.onChange(event.target.value.toUpperCase())}
                         isValid={Boolean(!isTouched || (isTouched && !error))}
+                        disabled={isSubmitting}
                       />
                     </FormControl>
                     <FormMessage />
@@ -62,9 +64,14 @@ function AddEditDeviceView() {
                 render={({ field, fieldState: { error } }) => (
                   <FormItem>
                     <FormLabel>Device Type *</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value} key={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      key={field.value}
+                      disabled={isSubmitting}
+                    >
                       <FormControl>
-                        <SelectTrigger isValid={!error}>
+                        <SelectTrigger isValid={!error} value={field.value}>
                           <SelectValue placeholder="Select a type" />
                         </SelectTrigger>
                       </FormControl>
@@ -89,7 +96,7 @@ function AddEditDeviceView() {
                 name="hdd_capacity"
                 render={({ field, fieldState: { error } }) => (
                   <FormItem>
-                    <FormLabel>HDD Capability *</FormLabel>
+                    <FormLabel>HDD Capacity (GB) *</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Ex.: 4"
@@ -98,6 +105,7 @@ function AddEditDeviceView() {
                         value={field.value || ''}
                         onChange={event => field.onChange(+event.target.value)}
                         isValid={!error}
+                        disabled={isSubmitting}
                       />
                     </FormControl>
                     <FormMessage />
@@ -112,10 +120,13 @@ function AddEditDeviceView() {
                 variant="outline"
                 onClick={primary.onClick}
                 className={primary.className}
+                disabled={isSubmitting}
               >
                 Cancel
               </Button>
-              <Button type="submit">{secondary.label}</Button>
+              <Button type="submit" loading={isSubmitting}>
+                {secondary.label}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

@@ -16,14 +16,15 @@ const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
     isValid?: boolean;
+    value?: string;
   }
->(({ className, children, isValid = true, ...props }, ref) => (
+>(({ className, children, value, isValid = true, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex h-10 w-full items-center justify-between rounded-md border  bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+      'flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
       isValid
-        ? 'border-input focus:ring-ring [&>span]:text-ninja-500'
+        ? `border-input focus:ring-ring' ${!value ? '[&>span]:text-ninja-500' : 'inherit'}`
         : 'border-destructive focus:ring-destructive [&>span]:text-destructive',
       className,
     )}
