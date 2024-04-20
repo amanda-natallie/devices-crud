@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { DeviceType, OrderByType } from 'store/types';
+import { DeviceType, OrderByType, OrderResultType } from 'store/types';
 
 export interface DeviceTypeSelect {
   id: DeviceType;
@@ -8,6 +8,8 @@ export interface DeviceTypeSelect {
   icon: ReactNode;
 }
 
-export type SortSelect = Omit<DeviceTypeSelect, 'icon'> & {
+export type SortSelect = Omit<DeviceTypeSelect, 'icon' | 'id'> & {
+  id: string;
+  device: OrderResultType;
   sortBy: OrderByType;
 };
