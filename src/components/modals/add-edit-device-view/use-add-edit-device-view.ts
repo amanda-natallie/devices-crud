@@ -33,7 +33,10 @@ const useAddEditDeviceView = () => {
   useEffect(() => {
     const getDeviceById = async (id: string) => {
       const { data } = await getById(id);
-      setDeviceFromAPI(data);
+      setDeviceFromAPI({
+        ...data!,
+        hdd_capacity: Number(data!.hdd_capacity),
+      });
     };
 
     if (isEdit || (isEdit && getByIdState.isSuccess && !getByIdState.data)) {

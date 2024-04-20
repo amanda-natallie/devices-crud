@@ -46,4 +46,5 @@ export type DevicesState = {
   orderResultBy: OrderResultType;
   deviceTypes: DeviceType[];
   searchValue: string;
+  preDebounceSearchValue: string;
 };

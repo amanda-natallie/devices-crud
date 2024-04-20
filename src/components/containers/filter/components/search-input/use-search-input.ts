@@ -1,4 +1,6 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef } from 'react';
+
+import { useAppSelector } from 'store';
 
 import { useDevicesActions } from 'hooks';
 
@@ -7,8 +9,8 @@ import { debounce } from 'utils/common';
 const DELAY = 500;
 
 const useSearchInput = () => {
-  const { setSearchValue } = useDevicesActions();
-  const [query, setQuery] = useState('');
+  const { setSearchValue, setPreDebounceSearchValue } = useDevicesActions();
+  const { preDebounceSearchValue } = useAppSelector(state => state.devicesState);
 
   const debouncedUpdateRef = useRef<ReturnType<typeof debounce> | null>(null);
 
@@ -20,7 +22,7 @@ const useSearchInput = () => {
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setQuery(value);
+    setPreDebounceSearchValue(value);
     debouncedUpdateRef.current?.(value);
   };
 
@@ -32,7 +34,7 @@ const useSearchInput = () => {
   );
 
   return {
-    query,
+    query: preDebounceSearchValue,
     handleSearch,
   };
 };

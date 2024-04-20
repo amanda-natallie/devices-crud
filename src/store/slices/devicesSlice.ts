@@ -9,6 +9,7 @@ const initialState: DevicesState = {
   orderResultBy: 'system_name',
   deviceTypes: [],
   searchValue: '',
+  preDebounceSearchValue: '',
 };
 
 export const devicesSlice = createSlice({
@@ -37,6 +38,9 @@ export const devicesSlice = createSlice({
     setSearchValueAction: (state, action: PayloadAction<string>) => {
       state.searchValue = action.payload;
     },
+    setPreDebounceSearchValueAction: (state, action: PayloadAction<string>) => {
+      state.preDebounceSearchValue = action.payload;
+    },
   },
 });
 
@@ -50,4 +54,5 @@ export const {
   setOrderByAction,
   setOrderByResultAction,
   setSearchValueAction,
+  setPreDebounceSearchValueAction,
 } = devicesSlice.actions;

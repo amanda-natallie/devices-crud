@@ -69,9 +69,6 @@ const useFilter = () => {
   return {
     filteredDevices,
     resetFilter,
-    filterDevices,
-    filterBySearch,
-    setFilteredDevices,
   };
 };
 

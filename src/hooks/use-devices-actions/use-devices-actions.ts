@@ -4,6 +4,7 @@ import {
   setDeviceTypesAction,
   setOrderByAction,
   setOrderByResultAction,
+  setPreDebounceSearchValueAction,
   setSearchValueAction,
   setSelectedDeviceAction,
 } from 'store/slices/devicesSlice';
@@ -35,6 +36,9 @@ const useDevicesActions = () => {
   const setSearchValue = (payload: string) => {
     dispatch(setSearchValueAction(payload));
   };
+  const setPreDebounceSearchValue = (payload: string) => {
+    dispatch(setPreDebounceSearchValueAction(payload));
+  };
 
   return {
     resetDevicesInfo,
@@ -43,6 +47,7 @@ const useDevicesActions = () => {
     setOrderByResult,
     setDeviceTypes,
     setSearchValue,
+    setPreDebounceSearchValue,
   };
 };
 

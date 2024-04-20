@@ -38,9 +38,9 @@ const useDeviceTypeSelect = () => {
   );
 
   const handleChangeDeviceType = useCallback(
-    (_checked: boolean, selectedDevice: DeviceType) => {
+    (checked: boolean, selectedDevice: DeviceType) => {
       const isAllSelected = isAll(selectedDevice);
-      const shouldResetFilter = deviceTypes.length === VALIDATIONS.TWO_DEVICES;
+      const shouldResetFilter = deviceTypes.length === VALIDATIONS.TWO_DEVICES && checked;
       const isThirdDevice = !isAllSelected && shouldResetFilter;
 
       if (isAllSelected || isThirdDevice) {
