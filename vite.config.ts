@@ -17,6 +17,7 @@ const exclusions = [
   '**/*.config.ts',
   '**/config/**/*.ts',
   '**/*.d.ts',
+  '**/e2e/**/*.ts',
 ];
 
 type ViteConfig = UserConfig & { test: InlineConfig };

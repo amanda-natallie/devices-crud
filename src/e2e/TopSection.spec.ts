@@ -13,14 +13,14 @@ test('As an User, When I click on the Add Device button, I can see the Add Devic
 }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Add Device' }).click();
-  await expect(page.getByRole('heading')).toContainText('Add/Edit Device');
+  await expect(page.getByRole('heading')).toContainText('Add Device');
 });
 test("As an User, When I click on the Add Device button, I can close it and don't see the modal anymore", async ({
   page,
 }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Add Device' }).click();
-  await expect(page.getByRole('heading')).toContainText('Add/Edit Device');
+  await expect(page.getByRole('heading')).toContainText('Add Device');
   await page.getByRole('button', { name: 'Cancel' }).click();
   await expect(page.getByText('Add/Edit Device')).not.toBeVisible();
 });
