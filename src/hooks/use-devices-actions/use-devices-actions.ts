@@ -2,23 +2,18 @@ import { useAppDispatch } from 'store';
 import {
   resetDevicesInfoAction,
   setDeviceTypesAction,
-  setFilteredDevicesAction,
   setOrderByAction,
   setOrderByResultAction,
   setSearchValueAction,
   setSelectedDeviceAction,
 } from 'store/slices/devicesSlice';
-import { DeviceType, IDevice, OrderByType, OrderResultType } from 'types';
+import { DeviceType, OrderByType, OrderResultType } from 'types';
 
 const useDevicesActions = () => {
   const dispatch = useAppDispatch();
 
   const resetDevicesInfo = () => {
     dispatch(resetDevicesInfoAction());
-  };
-
-  const setFilteredDevices = (payload: IDevice[]) => {
-    dispatch(setFilteredDevicesAction(payload));
   };
 
   const setSelectedDevice = (payload: string | null) => {
@@ -43,7 +38,6 @@ const useDevicesActions = () => {
 
   return {
     resetDevicesInfo,
-    setFilteredDevices,
     setSelectedDevice,
     setOrderBy,
     setOrderByResult,

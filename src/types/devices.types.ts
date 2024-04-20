@@ -41,7 +41,6 @@ export type IPutDeviceResponse = number;
 
 export type DevicesState = {
   devices: IDevice[];
-  filteredDevices: IDevice[];
   selectedDevice: string | null;
   orderBy: OrderByType;
   orderResultBy: OrderResultType;

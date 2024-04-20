@@ -18,9 +18,7 @@ export const devicesApi = publicAPI.injectEndpoints({
       query: () => '/devices',
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled;
-        const draft = [...data];
-
-        dispatch(setDevicesAction(draft.reverse()));
+        dispatch(setDevicesAction(data));
       },
       providesTags: ['GetDevices'],
     }),

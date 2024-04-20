@@ -4,7 +4,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: DevicesState = {
   devices: [],
-  filteredDevices: [],
   selectedDevice: null,
   orderBy: 'ASC',
   orderResultBy: 'system_name',
@@ -19,13 +18,9 @@ export const devicesSlice = createSlice({
     resetDevicesInfoAction: state => ({
       ...initialState,
       devices: state.devices,
-      filteredDevices: state.devices,
     }),
     setDevicesAction: (state, action: PayloadAction<IDevice[]>) => {
       state.devices = action.payload;
-    },
-    setFilteredDevicesAction: (state, action: PayloadAction<IDevice[]>) => {
-      state.filteredDevices = action.payload;
     },
     setSelectedDeviceAction: (state, action: PayloadAction<string | null>) => {
       state.selectedDevice = action.payload;
@@ -51,7 +46,6 @@ export const {
   resetDevicesInfoAction,
   setDeviceTypesAction,
   setDevicesAction,
-  setFilteredDevicesAction,
   setSelectedDeviceAction,
   setOrderByAction,
   setOrderByResultAction,
