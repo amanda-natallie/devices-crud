@@ -1,10 +1,9 @@
 import { useState } from 'react';
 
 import { sortSelectConfig } from 'config/sortSelectConfig';
+import { SortSelect as SortSelectType } from 'types';
 
 import { useDevicesActions } from 'hooks';
-
-import { SortSelect as SortSelectType } from 'domains/devices';
 
 const useSortSelect = () => {
   const { setOrderBy, setOrderByResult } = useDevicesActions();

@@ -1,4 +1,4 @@
-import { IDevice } from 'store/types';
+import { IDevice } from 'types';
 
 import { ActionsMenu } from 'components/containers/devices/components/actions-menu/actions-menu';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/ui/card/card';

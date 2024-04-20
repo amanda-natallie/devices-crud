@@ -8,7 +8,7 @@ import {
   IPostDeviceResponse,
   IPutDevicePayload,
   IPutDeviceResponse,
-} from 'store/types';
+} from 'types';
 
 import { publicAPI } from './api';
 

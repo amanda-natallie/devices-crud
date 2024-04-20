@@ -1,6 +1,6 @@
-import Icon from 'components/ui/icon/icon';
+import { DeviceTypeSelect } from 'types';
 
-import { DeviceTypeSelect } from 'domains/devices';
+import Icon from 'components/ui/icon/icon';
 
 export const deviceTypeConfig: DeviceTypeSelect[] = [
   {

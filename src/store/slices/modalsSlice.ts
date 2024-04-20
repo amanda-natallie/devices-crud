@@ -1,4 +1,4 @@
-import { MODAL_VIEWS_TYPE, ModalsState } from 'store/types';
+import { MODAL_VIEWS_TYPE, ModalsState } from 'types';
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 

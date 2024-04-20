@@ -8,7 +8,7 @@ import {
   setSearchValueAction,
   setSelectedDeviceAction,
 } from 'store/slices/devicesSlice';
-import { DeviceType, IDevice, OrderByType, OrderResultType } from 'store/types';
+import { DeviceType, IDevice, OrderByType, OrderResultType } from 'types';
 
 const useDevicesActions = () => {
   const dispatch = useAppDispatch();

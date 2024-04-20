@@ -1,4 +1,4 @@
-import { SortSelect } from 'domains/devices';
+import { SortSelect } from 'types';
 
 export const sortSelectConfig: SortSelect[] = [
   {

@@ -1,4 +1,4 @@
-import { MODAL_VIEWS_TYPE } from 'store/types';
+import { MODAL_VIEWS_TYPE } from 'types';
 
 import { useDevicesActions, useModalActions } from 'hooks';
 

@@ -1,4 +1,4 @@
-import { DevicesState, DeviceType, IDevice, OrderByType, OrderResultType } from 'store/types';
+import { DevicesState, DeviceType, IDevice, OrderByType, OrderResultType } from 'types';
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 

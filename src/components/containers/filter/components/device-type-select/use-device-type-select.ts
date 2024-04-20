@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 
 import { useAppSelector } from 'store';
-import { DeviceType } from 'store/types';
+import { DeviceType } from 'types';
 
 import { useDevicesActions } from 'hooks';
 

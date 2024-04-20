@@ -4,7 +4,7 @@ import {
   resetModalsInfoAction,
   setModalViewAction,
 } from 'store/slices/modalsSlice';
-import { MODAL_VIEWS_TYPE } from 'store/types';
+import { MODAL_VIEWS_TYPE } from 'types';
 
 const useModalActions = () => {
   const dispatch = useAppDispatch();
