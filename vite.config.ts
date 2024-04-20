@@ -11,6 +11,7 @@ const exclusions = [
   '**/utils/lib/*.ts',
   '**/components/ui/*.tsx',
   '**/use-filter.tsx',
+  '**/store/api/*.ts',
   '**/*.types.ts',
   '**/*.styles.ts',
   '**/*.config.ts',
@@ -27,7 +28,6 @@ const config: ViteConfig = {
     setupFiles: './setupTests.ts',
     root: './src',
     include: ['**/*.test.{ts,tsx}'],
-
     exclude: exclusions,
     coverage: {
       reportOnFailure: true,

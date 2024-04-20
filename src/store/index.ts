@@ -5,7 +5,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { publicAPI } from './api';
 import { devicesReducer, modalsReducer } from './slices';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   [publicAPI.reducerPath]: publicAPI.reducer,
   devicesState: devicesReducer,
   modalsState: modalsReducer,

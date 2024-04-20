@@ -1,72 +1,26 @@
-import { useCallback, useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
+import { deviceTypeConfig } from 'config/deviceTypeConfig';
 import { toast } from 'sonner';
-import { useAppSelector } from 'store';
-import { useLazyGetDeviceByIdQuery, usePostDeviceMutation, usePutDeviceMutation } from 'store/api';
-import { IDevice } from 'types';
-import { z } from 'zod';
+import { FormValues, IDevice, schema } from 'types';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useDevicesActions, useModalActions } from 'hooks';
 
-type OnCLick = () => void | SubmitHandler<IDevice>;
+import { useAddDevice, useEditDevice } from './handlers';
 
 const useAddEditDeviceView = () => {
-  const [getById, getByIdState] = useLazyGetDeviceByIdQuery();
-  const [
-    addDevice,
-    { isLoading: isAddLoading, isSuccess: isAddSuccess, isError: isAddError, error: addError },
-  ] = usePostDeviceMutation();
-  const [
-    editDevice,
-    { isLoading: isEditLoading, isSuccess: isEditSuccess, isError: isEditError, error: editError },
-  ] = usePutDeviceMutation();
-  const [deviceFromAPI, setDeviceFromAPI] = useState<IDevice | undefined>(undefined);
-  const { selectedDevice } = useAppSelector(state => state.devicesState);
   const { closeModal } = useModalActions();
   const { setSelectedDevice } = useDevicesActions();
 
-  const isEdit = !!selectedDevice;
+  const { isAddSubmiting, onAddSubmit } = useAddDevice();
 
-  useEffect(() => {
-    const getDeviceById = async (id: string) => {
-      const { data } = await getById(id);
-      setDeviceFromAPI({
-        ...data!,
-        hdd_capacity: Number(data!.hdd_capacity),
-      });
-    };
+  const { isEdit, isEditFetching, isEditSubmitting, deviceFromAPI, onEditSubmit, onCloseEdit } =
+    useEditDevice();
 
-    if (isEdit || (isEdit && getByIdState.isSuccess && !getByIdState.data)) {
-      getDeviceById(selectedDevice);
-    }
-  }, [getById, getByIdState.data, getByIdState.isSuccess, isEdit, selectedDevice]);
-
-  const schema = z.object({
-    id: z.string().optional(),
-    system_name: z
-      .string({
-        required_error: 'System Name is required',
-      })
-      .min(3, {
-        message: 'System Name must be at least 3 characters',
-      }),
-    type: z.string({
-      required_error: 'Device Type is required',
-    }),
-    hdd_capacity: z
-      .number({
-        required_error: 'HDD Capacity is required',
-        invalid_type_error: 'HDD Capacity must be a number',
-      })
-      .min(4, {
-        message: 'HDD Capacity must be greater than 4 GB',
-      }),
-  });
-
-  const formMethods = useForm<z.infer<typeof schema>>({
+  const formMethods = useForm<FormValues>({
     mode: 'all',
     resolver: zodResolver(schema),
     defaultValues: {
@@ -86,84 +40,49 @@ const useAddEditDeviceView = () => {
     }
   }, [deviceFromAPI, formMethods, isEdit]);
 
-  const handleAfterSubmit = useCallback(
-    (systemName: string) => {
-      closeModal();
-      setSelectedDevice(null);
-      setDeviceFromAPI(undefined);
-      toast(`The devices list was successfully updated with device ${systemName}`);
-    },
-    [closeModal, setSelectedDevice, setDeviceFromAPI],
-  );
-
-  const handleAfterError = useCallback(() => {
-    toast(
-      `An error occurred while trying to ${isEdit ? 'update' : 'create'} the device. Error: ${addError || editError}`,
-    );
-  }, [addError, editError, isEdit]);
-
-  const handleAddDevice = async (data: z.infer<typeof schema>) => {
-    await addDevice(data);
+  const onClose = () => {
+    closeModal();
+    setSelectedDevice(null);
+    onCloseEdit();
   };
 
-  const handleEditDevice = async (data: z.infer<typeof schema>) => {
-    await editDevice({
-      ...data,
-      id: deviceFromAPI!.id,
-    });
-  };
-
-  const onSubmit = (data: z.infer<typeof schema>) => {
+  const onSubmit = (data: FormValues) => {
     if (isEdit) {
-      handleEditDevice(data);
+      if (deviceFromAPI && JSON.stringify(deviceFromAPI) === JSON.stringify(data)) {
+        onClose();
+        toast('No changes were made. The device was not updated.');
+        return;
+      }
+
+      onEditSubmit(data);
     } else {
-      handleAddDevice(data);
+      onAddSubmit(data);
     }
   };
-
-  useEffect(() => {
-    if (isAddSuccess || isEditSuccess) {
-      handleAfterSubmit(formMethods.getValues().system_name);
-    }
-    if (isAddError || isEditError) {
-      handleAfterError();
-    }
-  }, [
-    isAddSuccess,
-    formMethods,
-    isEditSuccess,
-    handleAfterSubmit,
-    isAddError,
-    isEditError,
-    handleAfterError,
-  ]);
-
-  const { isFetching } = getByIdState;
-  const isSubmitting = isAddLoading || isEditLoading;
-  const shouldDisableButtons = isSubmitting || isFetching;
+  const isFetching = isEditFetching;
+  const isSubmitting = isEdit ? isEditSubmitting : isAddSubmiting;
+  const shouldDisableButtons = isSubmitting || isEditFetching;
 
   const actions = {
-    primary: {
-      onClick: () => {
-        closeModal();
-        setSelectedDevice(null);
-        setDeviceFromAPI(undefined);
-      },
+    cancel: {
+      onClick: () => onClose(),
       className: 'text-primary hover:text-primary/80',
+      disabled: shouldDisableButtons,
     },
-    secondary: {
+    submit: {
       label: 'Submit',
-      onClick: onSubmit as OnCLick,
-      isDisabled: shouldDisableButtons,
+      disabled: shouldDisableButtons,
+      loading: isSubmitting,
     },
   };
-
+  const selectItems = deviceTypeConfig.filter(({ id }) => id !== 'ALL');
   return {
     actions,
     isEdit,
     isFetching,
     isSubmitting,
     formMethods,
+    selectItems,
     onSubmit,
     deviceFromAPI,
   };

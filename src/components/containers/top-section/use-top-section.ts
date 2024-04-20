@@ -7,6 +7,7 @@ const useTopSection = () => {
   const handleOpenModal = () => {
     setModalView(MODAL_VIEWS_TYPE.ADD_EDIT_DEVICE_VIEW);
   };
+
   return {
     handleOpenModal,
   };

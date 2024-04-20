@@ -1,5 +1,3 @@
-import { deviceTypeConfig } from 'config/deviceTypeConfig';
-
 import { Button } from 'components/ui/button';
 import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from 'components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'components/ui/form';
@@ -16,13 +14,18 @@ import { DevicesModalSkeleton } from './skeleton';
 import useAddEditDeviceView from './use-add-edit-device-view';
 
 function AddEditDeviceView() {
-  const { actions, isEdit, formMethods, isFetching, isSubmitting, onSubmit } =
+  const { selectItems, actions, isEdit, isFetching, isSubmitting, formMethods, onSubmit } =
     useAddEditDeviceView();
-  const selectItems = deviceTypeConfig.filter(({ id }) => id !== 'ALL');
-  const { primary, secondary } = actions;
+
+  const { cancel, submit } = actions;
 
   return (
-    <DialogContent className="sm:max-w-[540px]">
+    <DialogContent
+      className="sm:max-w-[540px]"
+      onInteractOutside={e => {
+        e.preventDefault();
+      }}
+    >
       <DialogHeader>
         <DialogTitle>{`${isEdit ? 'Edit' : 'Add'} Device`}</DialogTitle>
       </DialogHeader>
@@ -113,14 +116,14 @@ function AddEditDeviceView() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={primary.onClick}
-                className={primary.className}
-                disabled={isSubmitting}
+                onClick={cancel.onClick}
+                className={cancel.className}
+                disabled={cancel.disabled}
               >
                 Cancel
               </Button>
-              <Button type="submit" loading={isSubmitting}>
-                {secondary.label}
+              <Button type="submit" loading={submit.loading} disabled={submit.disabled}>
+                {submit.label}
               </Button>
             </DialogFooter>
           </form>

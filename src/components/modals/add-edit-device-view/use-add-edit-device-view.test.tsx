@@ -1,79 +1,131 @@
-import { ReactNode } from 'react';
-import { Provider } from 'react-redux';
+import { useForm } from 'react-hook-form';
 
 import { toast } from 'sonner';
-import { store } from 'store';
 import { vi } from 'vitest';
+
+import { useDevicesActions, useModalActions } from 'hooks';
 
 import { act, renderHook, waitFor } from 'utils/test';
 
+import { useAddDevice, useEditDevice } from './handlers';
 import useAddEditDeviceView from './use-add-edit-device-view';
 
-const setup = (overrides = {}) => {
-  const mockUseForm = {
-    handleSubmit: vi.fn(callback => callback),
-    register: vi.fn(),
-    setValue: vi.fn(),
-    getValues: vi.fn(() => ({ system_name: 'Test System' })),
-    ...overrides,
-  };
-  const useForm = vi.fn();
+vi.mock('react-hook-form', () => ({
+  useForm: vi.fn(),
+}));
 
-  useForm.mockReturnValue(mockUseForm);
-  return mockUseForm;
-};
+vi.mock('./handlers', () => ({
+  useAddDevice: vi.fn(),
+  useEditDevice: vi.fn(),
+}));
 
-const wrapper = ({ children }: { children: ReactNode }) => (
-  <Provider store={store}>{children}</Provider>
-);
+vi.mock('hooks', () => ({
+  useModalActions: vi.fn(),
+  useDevicesActions: vi.fn(),
+}));
 
-it('initializes with default form states and fetches device details if editing', async () => {
-  const mockGetById = vi.fn(() =>
-    Promise.resolve({ data: { id: '123', system_name: 'Device 123' } }),
-  );
-  const useLazyGetDeviceByIdQuery = vi.fn();
-  const useAppSelector = vi.fn();
-  useLazyGetDeviceByIdQuery.mockReturnValue([mockGetById, { data: null, isSuccess: true }]);
-  useAppSelector.mockReturnValue({ selectedDevice: '123' });
+describe('useAddEditDeviceView', () => {
+  beforeEach(() => {
+    (useForm as jest.Mock).mockReturnValue({
+      setValue: vi.fn(),
+      handleSubmit: vi.fn(),
+    });
 
-  const { result } = renderHook(() => useAddEditDeviceView(), { wrapper });
+    (useAddDevice as jest.Mock).mockReturnValue({
+      isAddSubmiting: false,
+      onAddSubmit: vi.fn(),
+    });
 
-  waitFor(() => {
-    expect(result.current.isEdit).toBe(true);
-    expect(mockGetById).toHaveBeenCalledWith('123');
-  });
-});
-it('submits the form using addDevice mutation when not in edit mode', async () => {
-  vi.useFakeTimers();
-  const addDeviceMock = vi.fn(() => Promise.resolve({ data: { id: '124' } }));
-  const usePostDeviceMutation = vi.fn();
-  const useAppSelector = vi.fn();
-  usePostDeviceMutation.mockReturnValue([addDeviceMock, { isLoading: false }]);
-  useAppSelector.mockReturnValue({ selectedDevice: null });
-  setup();
+    (useEditDevice as jest.Mock).mockReturnValue({
+      isEdit: false,
+      isEditFetching: false,
+      isEditSubmitting: false,
+      deviceFromAPI: null,
+      onEditSubmit: vi.fn(),
+      onCloseEdit: vi.fn(),
+    });
 
-  const { result } = renderHook(() => useAddEditDeviceView(), { wrapper });
-  result.current.onSubmit({ system_name: 'New Device', type: 'Type1', hdd_capacity: 500 });
+    (useModalActions as jest.Mock).mockReturnValue({
+      closeModal: vi.fn(),
+    });
 
-  await vi.runAllTimers(); // Advance any debounced/throttled timers
-  waitFor(() => {
-    expect(addDeviceMock).toHaveBeenCalledWith({
-      system_name: 'New Device',
-      type: 'Type1',
-      hdd_capacity: 500,
+    (useDevicesActions as jest.Mock).mockReturnValue({
+      setSelectedDevice: vi.fn(),
     });
   });
-});
-it('handles API success and shows toast on successful addition', async () => {
-  const usePostDeviceMutation = vi.fn();
-  const addDeviceMock = vi.fn(() => Promise.resolve({ data: { id: '124' } }));
-  usePostDeviceMutation.mockReturnValue([addDeviceMock, { isSuccess: true }]);
-  const { result } = renderHook(() => useAddEditDeviceView(), { wrapper });
 
-  act(() => {
-    result.current.onSubmit({ system_name: 'New Device', type: 'Type1', hdd_capacity: 500 });
+  it('should return the correct initial state', () => {
+    const { result } = renderHook(() => useAddEditDeviceView());
+    expect(result.current.isEdit).toBe(false);
+    expect(result.current.isFetching).toBe(false);
+    expect(result.current.isSubmitting).toBe(false);
+    expect(result.current.deviceFromAPI).toBe(null);
   });
-  waitFor(() => {
-    expect(toast).toHaveBeenCalledWith(expect.stringContaining('successfully updated'));
+
+  it('should handle form submission', () => {
+    const { result } = renderHook(() => useAddEditDeviceView());
+    act(() => {
+      result.current.onSubmit({
+        id: '1',
+        system_name: 'Device1',
+        type: 'WINDOWS_WORKSTATION',
+        hdd_capacity: 500,
+      });
+    });
+    expect(useAddDevice().onAddSubmit).toHaveBeenCalled();
+  });
+
+  it('should handle form cancellation', () => {
+    const { result } = renderHook(() => useAddEditDeviceView());
+    act(() => {
+      result.current.actions.cancel.onClick();
+    });
+    expect(useModalActions().closeModal).toHaveBeenCalled();
+    expect(useDevicesActions().setSelectedDevice).toHaveBeenCalledWith(null);
+    expect(useEditDevice().onCloseEdit).toHaveBeenCalled();
+  });
+  it('should show toast when no changes were made', () => {
+    const payload = {
+      id: '1',
+      system_name: 'Device1',
+      type: 'WINDOWS_WORKSTATION',
+      hdd_capacity: 500,
+    };
+    (useEditDevice as jest.Mock).mockReturnValue({
+      isEdit: true,
+      deviceFromAPI: payload,
+      onCloseEdit: vi.fn(),
+    });
+    const { result } = renderHook(() => useAddEditDeviceView());
+    act(() => {
+      result.current.onSubmit(payload);
+    });
+    waitFor(() => {
+      expect(toast).toHaveBeenCalledWith('No changes were made. The device was not updated.');
+    });
+  });
+  it('should call onEditSubmit when changes were made', () => {
+    const payload = {
+      id: '1',
+      system_name: 'Device1',
+      type: 'WINDOWS_WORKSTATION',
+      hdd_capacity: 500,
+    };
+    (useEditDevice as jest.Mock).mockReturnValue({
+      isEdit: true,
+      deviceFromAPI: payload,
+      onCloseEdit: vi.fn(),
+      onEditSubmit: vi.fn(),
+    });
+    const { result } = renderHook(() => useAddEditDeviceView());
+    act(() => {
+      result.current.onSubmit({
+        id: '1',
+        system_name: 'Device2',
+        type: 'WINDOWS_WORKSTATION',
+        hdd_capacity: 500,
+      });
+    });
+    expect(useEditDevice().onEditSubmit).toHaveBeenCalled();
   });
 });
