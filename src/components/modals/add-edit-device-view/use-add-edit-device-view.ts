@@ -35,7 +35,9 @@ const useAddEditDeviceView = () => {
     if (deviceFromAPI && isEdit) {
       const fieldsToUpdate: Array<keyof IDevice> = ['id', 'system_name', 'type', 'hdd_capacity'];
       fieldsToUpdate.forEach(field => {
-        formMethods.setValue(field, deviceFromAPI[field], { shouldTouch: true });
+        const value =
+          field === 'hdd_capacity' ? parseInt(deviceFromAPI[field], 10) : deviceFromAPI[field];
+        formMethods.setValue(field, value, { shouldTouch: true });
       });
     }
   }, [deviceFromAPI, formMethods, isEdit]);
@@ -47,8 +49,13 @@ const useAddEditDeviceView = () => {
   };
 
   const onSubmit = (data: FormValues) => {
+    const payload = {
+      ...data,
+      hdd_capacity: data.hdd_capacity.toString(),
+    };
     if (isEdit) {
-      if (deviceFromAPI && JSON.stringify(deviceFromAPI) === JSON.stringify(data)) {
+      if (deviceFromAPI && JSON.stringify(deviceFromAPI) === JSON.stringify(payload)) {
+        formMethods.reset();
         onClose();
         toast('No changes were made. The device was not updated.');
         return;
@@ -58,6 +65,7 @@ const useAddEditDeviceView = () => {
     } else {
       onAddSubmit(data);
     }
+    formMethods.reset();
   };
   const isFetching = isEditFetching;
   const isSubmitting = isEdit ? isEditSubmitting : isAddSubmiting;

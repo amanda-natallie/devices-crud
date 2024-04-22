@@ -1,23 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import { toast } from 'sonner';
 import { useAppSelector } from 'store';
 import { useLazyGetDeviceByIdQuery, usePutDeviceMutation } from 'store/api';
 import { FormValues, IDevice } from 'types';
 
+import { useDevicesActions } from 'hooks';
+
 const useEditDevice = () => {
+  const { setDeviceFromAPI } = useDevicesActions();
   const [getById, getByIdState] = useLazyGetDeviceByIdQuery();
-  const [editDevice, { isLoading: isEditSubmitting, error: editError }] = usePutDeviceMutation();
-  const [deviceFromAPI, setDeviceFromAPI] = useState<IDevice | undefined>(undefined);
-  const { selectedDevice } = useAppSelector(state => state.devicesState);
+  const [editDevice, { isLoading: isEditSubmitting }] = usePutDeviceMutation();
+  const { selectedDevice, deviceFromAPI } = useAppSelector(state => state.devicesState);
 
   useEffect(() => {
     const getDeviceById = async (id: string) => {
-      const { data } = await getById(id);
-      setDeviceFromAPI({
-        ...data!,
-        hdd_capacity: Number(data!.hdd_capacity),
-      });
+      await getById(id);
     };
 
     if (selectedDevice && !deviceFromAPI) {
@@ -30,14 +27,10 @@ const useEditDevice = () => {
   };
 
   const onEditSubmit = async (data: FormValues) => {
-    await editDevice(data as IDevice)
-      .then(() => {
-        onCloseEdit();
-        toast.success(`The devices list was successfully updated with device ${data.system_name}`);
-      })
-      .catch(() => {
-        toast(`An error occurred while trying to update the device. Error: ${editError}`);
-      });
+    await editDevice({
+      ...data,
+      hdd_capacity: data.hdd_capacity.toString(),
+    } as IDevice);
   };
 
   const { isFetching: isEditFetching } = getByIdState;

@@ -29,11 +29,13 @@ describe('useAddEditDeviceView', () => {
     (useForm as jest.Mock).mockReturnValue({
       setValue: vi.fn(),
       handleSubmit: vi.fn(),
+      reset: vi.fn(),
     });
 
     (useAddDevice as jest.Mock).mockReturnValue({
       isAddSubmiting: false,
       onAddSubmit: vi.fn(),
+      onEditSubmit: vi.fn(),
     });
 
     (useEditDevice as jest.Mock).mockReturnValue({
@@ -95,6 +97,7 @@ describe('useAddEditDeviceView', () => {
       isEdit: true,
       deviceFromAPI: payload,
       onCloseEdit: vi.fn(),
+      onEditSubmit: vi.fn(),
     });
     const { result } = renderHook(() => useAddEditDeviceView());
     act(() => {

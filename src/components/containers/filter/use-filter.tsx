@@ -10,25 +10,41 @@ const useFilter = () => {
     state => state.devicesState,
   );
 
+  const defaultSort = useCallback(
+    (list: IDevice[]) => {
+      const draft = [...list];
+
+      if (orderResultBy === 'hdd_capacity' && orderBy === 'ASC') {
+        return draft.sort((a, b) => parseInt(a.hdd_capacity, 10) - parseInt(b.hdd_capacity, 10));
+      }
+      return draft;
+    },
+    [orderBy, orderResultBy],
+  );
+
   const resetFilter = useCallback(() => {
-    setFilteredDevices(devices);
+    const draft = [...devices];
+    draft.sort((a, b) => parseInt(a.hdd_capacity, 10) - parseInt(b.hdd_capacity, 10));
+    setFilteredDevices(draft);
   }, [devices]);
 
   const filterByType = useCallback(() => {
     if (deviceTypes.includes('ALL') || deviceTypes.length === 0) {
       return devices;
     }
-    return devices.filter(device => deviceTypes.includes(device.type as DeviceType));
-  }, [devices, deviceTypes]);
+    return defaultSort(devices.filter(device => deviceTypes.includes(device.type as DeviceType)));
+  }, [deviceTypes, defaultSort, devices]);
 
   const filterBySearch = useCallback(
     () =>
-      searchValue.length === 0
-        ? devices
-        : devices.filter(device =>
-            device.system_name.toLowerCase().includes(searchValue.toLowerCase()),
-          ),
-    [devices, searchValue],
+      defaultSort(
+        searchValue.length === 0
+          ? devices
+          : devices.filter(device =>
+              device.system_name.toLowerCase().includes(searchValue.toLowerCase()),
+            ),
+      ),
+    [defaultSort, devices, searchValue],
   );
 
   const filterBySort = useCallback(
@@ -59,12 +75,10 @@ const useFilter = () => {
   }, [devices, orderBy, orderResultBy, deviceTypes, searchValue, filterDevices]);
 
   useEffect(() => {
-    if (devices.length > 0 && filteredDevices.length === 0) {
-      const draft = [...devices];
-      draft.sort((a, b) => Number(a.hdd_capacity) - Number(b.hdd_capacity));
-      setFilteredDevices(draft);
+    if (devices.length > 0 && filteredDevices.length === 0 && !searchValue) {
+      resetFilter();
     }
-  }, [devices, filteredDevices]);
+  }, [devices, filteredDevices, resetFilter, searchValue]);
 
   return {
     filteredDevices,

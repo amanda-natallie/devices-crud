@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
-import { toast } from 'sonner';
 import { store, useAppSelector } from 'store';
 import { useLazyGetDeviceByIdQuery, usePutDeviceMutation } from 'store/api';
 import { afterEach, expect, it, vi } from 'vitest';
@@ -50,7 +49,7 @@ vi.mock('hooks', async importOriginal => {
   return {
     ...actual,
     useModalActions: vi.fn(),
-    useDevicesActions: vi.fn(() => ({ setSelectedDevice: vi.fn() })),
+    useDevicesActions: vi.fn(() => ({ setSelectedDevice: vi.fn(), setDeviceFromAPI: vi.fn() })),
   };
 });
 
@@ -125,21 +124,9 @@ describe('useEditDevice', () => {
       expect(useDevicesActions().setSelectedDevice).toHaveBeenCalledWith(null);
     });
   });
-
-  it('should display an error toast if device addition fails', async () => {
+  it('should setDeviceFromAPI to undefined when onCloseEdit is called', () => {
     setup();
-    const errorMessage = 'null';
-    const addErrorMock = { message: errorMessage };
-    editDeviceMock.mockRejectedValueOnce(addErrorMock);
-
-    const data = { id: '123', system_name: 'New Device', type: 'server', hdd_capacity: 100 };
-    await act(async () => {
-      await result.current.onEditSubmit(data);
-    });
-    waitFor(() => {
-      expect(toast).toHaveBeenCalledWith(
-        `An error occurred while trying to 'create the device. Error: ${addErrorMock.message}`,
-      );
-    });
+    result.current.onCloseEdit();
+    waitFor(() => expect(useDevicesActions().setDeviceFromAPI).toHaveBeenCalledWith(undefined));
   });
 });

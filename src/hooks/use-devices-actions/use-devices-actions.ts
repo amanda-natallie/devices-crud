@@ -1,6 +1,7 @@
 import { useAppDispatch } from 'store';
 import {
   resetDevicesInfoAction,
+  setDeviceFromAPIAction,
   setDeviceTypesAction,
   setOrderByAction,
   setOrderByResultAction,
@@ -8,7 +9,7 @@ import {
   setSearchValueAction,
   setSelectedDeviceAction,
 } from 'store/slices/devicesSlice';
-import { DeviceType, OrderByType, OrderResultType } from 'types';
+import { DeviceType, IDevice, OrderByType, OrderResultType } from 'types';
 
 const useDevicesActions = () => {
   const dispatch = useAppDispatch();
@@ -19,6 +20,10 @@ const useDevicesActions = () => {
 
   const setSelectedDevice = (payload: string | null) => {
     dispatch(setSelectedDeviceAction(payload));
+  };
+
+  const setDeviceFromAPI = (payload: IDevice | undefined) => {
+    dispatch(setDeviceFromAPIAction(payload));
   };
 
   const setOrderBy = (payload: OrderByType) => {
@@ -48,6 +53,7 @@ const useDevicesActions = () => {
     setDeviceTypes,
     setSearchValue,
     setPreDebounceSearchValue,
+    setDeviceFromAPI,
   };
 };
 

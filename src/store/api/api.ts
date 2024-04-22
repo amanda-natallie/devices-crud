@@ -6,7 +6,9 @@ import {
 } from '@reduxjs/toolkit/query';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
-const baseUrl = 'https://devices-api.vallorisolutions.com';
+const baseUrl = import.meta.env.VITE_REST_API_URL;
+// eslint-disable-next-line no-console
+console.log(import.meta.env);
 
 export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
   args,

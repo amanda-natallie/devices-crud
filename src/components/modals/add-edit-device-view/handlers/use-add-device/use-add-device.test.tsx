@@ -94,7 +94,10 @@ describe('useAddDevice', () => {
     await act(async () => {
       await result.current.onAddSubmit(data);
     });
-    expect(addDeviceMock).toHaveBeenCalledWith(data);
+    expect(addDeviceMock).toHaveBeenCalledWith({
+      ...data,
+      hdd_capacity: data.hdd_capacity.toString(),
+    });
   });
 
   it('should close the modal and clear selected device on successful addition', async () => {
@@ -110,20 +113,5 @@ describe('useAddDevice', () => {
         `The devices list was successfully updated with device ${data.system_name}`,
       );
     });
-  });
-
-  it('should display an error toast if device addition fails', async () => {
-    setup();
-    const errorMessage = 'null';
-    const addErrorMock = { message: errorMessage };
-    addDeviceMock.mockRejectedValueOnce(addErrorMock);
-
-    const data = { system_name: 'New Device', type: 'server', hdd_capacity: 100 };
-    await act(async () => {
-      await result.current.onAddSubmit(data);
-    });
-    expect(toast.error).toHaveBeenCalledWith(
-      `An error occurred while trying to 'create the device. Error: ${addErrorMock.message}`,
-    );
   });
 });

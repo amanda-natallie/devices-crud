@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 
 import { sortSelectConfig } from 'config/sortSelectConfig';
 import { store } from 'store';
+import { vi } from 'vitest';
 
 import { act, renderHook } from 'utils/test';
 
@@ -27,5 +28,21 @@ describe('useSortSelect', () => {
     });
 
     expect(result.current.value).toEqual(sortSelectConfig[1]);
+  });
+  it('should reset the sort configuration to the default value after resetting filters', () => {
+    const useAppSelector = vi.fn();
+    useAppSelector.mockReturnValue({
+      devicesState: {
+        sortBy: 'ASC',
+        orderResultBy: 'hdd_capacity',
+      },
+    });
+    const { result } = renderHook(() => useSortSelect(), { wrapper });
+
+    act(() => {
+      result.current.setSort('hdd-asc');
+    });
+
+    expect(result.current.value).toEqual(sortSelectConfig[0]);
   });
 });

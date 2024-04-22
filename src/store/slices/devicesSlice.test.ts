@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import devicesReducer, {
   resetDevicesInfoAction,
+  setDeviceFromAPIAction,
   setDeviceTypesAction,
   setDevicesAction,
   setOrderByAction,
@@ -12,7 +13,7 @@ import devicesReducer, {
   setSelectedDeviceAction,
 } from './devicesSlice';
 
-const payload = { id: '1', system_name: 'Device 1', type: 'WINDOWS', hdd_capacity: 100 };
+const payload = { id: '1', system_name: 'Device 1', type: 'WINDOWS', hdd_capacity: '100' };
 describe('devicesSlice', () => {
   let initialState: DevicesState;
 
@@ -20,8 +21,9 @@ describe('devicesSlice', () => {
     initialState = {
       devices: [],
       selectedDevice: null,
+      deviceFromAPI: undefined,
       orderBy: 'ASC',
-      orderResultBy: 'system_name',
+      orderResultBy: 'hdd_capacity',
       deviceTypes: [],
       searchValue: '',
       preDebounceSearchValue: '',
@@ -57,6 +59,11 @@ describe('devicesSlice', () => {
     const newState = devicesReducer(initialState, setSelectedDeviceAction(deviceId));
 
     expect(newState.selectedDevice).toBe(deviceId);
+  });
+  it('should handle setting device from API', () => {
+    const newState = devicesReducer(initialState, setDeviceFromAPIAction(payload));
+
+    expect(newState.deviceFromAPI).toBe(payload);
   });
 
   it('should handle setting order by', () => {

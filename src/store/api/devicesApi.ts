@@ -1,5 +1,5 @@
 import { toast } from 'sonner';
-import { setDevicesAction, setSelectedDeviceAction } from 'store/slices';
+import { setDeviceFromAPIAction, setDevicesAction, setSelectedDeviceAction } from 'store/slices';
 import { closeModalAction } from 'store/slices/modalsSlice';
 import {
   IGetDeviceByIdResponse,
@@ -9,6 +9,8 @@ import {
   IPutDevicePayload,
   IPutDeviceResponse,
 } from 'types';
+
+import { toCapitalize } from 'utils/common';
 
 import { publicAPI } from './api';
 
@@ -24,6 +26,10 @@ export const devicesApi = publicAPI.injectEndpoints({
     }),
     getDeviceById: builder.query<IGetDeviceByIdResponse, string>({
       query: id => `/devices/${id}`,
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled;
+        dispatch(setDeviceFromAPIAction(data));
+      },
     }),
     postDevice: builder.mutation<IPostDeviceResponse, IPostDevicePayload>({
       query: device => ({
@@ -36,8 +42,9 @@ export const devicesApi = publicAPI.injectEndpoints({
           data: { hdd_capacity: hdd, system_name: system, type },
         } = await queryFulfilled;
         dispatch(closeModalAction());
+        dispatch(setSelectedDeviceAction(null));
         toast('Successfully created new device.', {
-          description: `Device: ${system}, Type: ${type}, HDD Capacity: ${hdd}`,
+          description: `Device: ${system}, Type: ${toCapitalize(type)} workstation, HDD Capacity: ${hdd} GB`,
         });
       },
       invalidatesTags: ['GetDevices'],
@@ -48,11 +55,15 @@ export const devicesApi = publicAPI.injectEndpoints({
         method: 'PUT',
         body: device,
       }),
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        const { hdd_capacity: hdd, system_name: system, type } = args;
         await queryFulfilled;
+        dispatch(setDeviceFromAPIAction(undefined));
         dispatch(setSelectedDeviceAction(null));
         dispatch(closeModalAction());
-        toast('Device updated successfully.');
+        toast('Successfully updated the device.', {
+          description: `Device: ${system}, Type: ${toCapitalize(type)} workstation, HDD Capacity: ${hdd} GB`,
+        });
       },
       invalidatesTags: ['GetDevices'],
     }),

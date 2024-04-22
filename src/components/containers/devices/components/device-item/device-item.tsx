@@ -9,7 +9,7 @@ import { toCapitalize } from 'utils/common';
 function DeviceItem({ hdd_capacity: hdd, id, system_name: system, type }: IDevice) {
   const iconName = type.toLowerCase() as keyof typeof iconType;
   return (
-    <Card className="group" key={id}>
+    <Card className="group" key={id} data-testid={`device-item-${id}`}>
       <CardHeader>
         <CardTitle>
           <Icon name={iconName} color="#595766" />

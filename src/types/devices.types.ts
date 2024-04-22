@@ -17,7 +17,7 @@ export type IDevice = {
   id: string;
   system_name: string;
   type: string;
-  hdd_capacity: number;
+  hdd_capacity: string;
 };
 
 /* Constants */
@@ -42,6 +42,7 @@ export type IPutDeviceResponse = number;
 export type DevicesState = {
   devices: IDevice[];
   selectedDevice: string | null;
+  deviceFromAPI: IDevice | undefined;
   orderBy: OrderByType;
   orderResultBy: OrderResultType;
   deviceTypes: DeviceType[];

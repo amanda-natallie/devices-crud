@@ -5,8 +5,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 const initialState: DevicesState = {
   devices: [],
   selectedDevice: null,
+  deviceFromAPI: undefined,
   orderBy: 'ASC',
-  orderResultBy: 'system_name',
+  orderResultBy: 'hdd_capacity',
   deviceTypes: [],
   searchValue: '',
   preDebounceSearchValue: '',
@@ -25,6 +26,9 @@ export const devicesSlice = createSlice({
     },
     setSelectedDeviceAction: (state, action: PayloadAction<string | null>) => {
       state.selectedDevice = action.payload;
+    },
+    setDeviceFromAPIAction: (state, action: PayloadAction<IDevice | undefined>) => {
+      state.deviceFromAPI = action.payload;
     },
     setOrderByAction: (state, action: PayloadAction<OrderByType>) => {
       state.orderBy = action.payload;
@@ -55,4 +59,5 @@ export const {
   setOrderByResultAction,
   setSearchValueAction,
   setPreDebounceSearchValueAction,
+  setDeviceFromAPIAction,
 } = devicesSlice.actions;
