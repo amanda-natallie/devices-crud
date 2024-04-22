@@ -90,6 +90,7 @@ jobs:
             Repository=https://github.com/${{ github.repository }},
             OauthToken=${{ secrets.AMPLIFY_TOKEN }},
             Domain=${{ secrets.AMPLIFY_DOMAIN }}
+            UserRestApiUrl=${{ secrets.VITE_USER_REST_API_URL }}
       - name: Print default domain
         env:
           DefaultDomain: ${{ steps.amplify-stack.outputs.DefaultDomain }}

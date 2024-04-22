@@ -6,9 +6,7 @@ import {
 } from '@reduxjs/toolkit/query';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
-const baseUrl = import.meta.env.VITE_REST_API_URL;
-// eslint-disable-next-line no-console
-console.log(import.meta.env);
+const baseUrl = import.meta.env.VITE_USER_REST_API_URL;
 
 export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
   args,

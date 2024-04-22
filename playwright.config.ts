@@ -15,7 +15,7 @@ export default defineConfig({
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
     env: {
-      VITE_REST_API_URL: 'http://localhost:7000',
+      VITE_USER_REST_API_URL: 'http://localhost:7000',
       VITE_USER_NODE_ENV: 'development',
     },
   },

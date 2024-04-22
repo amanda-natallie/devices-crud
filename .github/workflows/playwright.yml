@@ -13,15 +13,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18.x
+
       - name: Install dependencies
         run: npm install -g pnpm && pnpm install --frozen-lockfile --prod=false
+
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
+
       - name: Run Playwright Tests
         run: NODE_ENV="development" && pnpm test:e2e
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 10
