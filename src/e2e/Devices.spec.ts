@@ -52,9 +52,9 @@ test.describe.parallel('When page loads', () => {
     await page.getByRole('menuitem', { name: 'Edit' }).click();
     await expect(page.getByRole('heading')).toContainText('Edit Device');
     await checkFormFieldsVisibility(page);
-    await expect(page.getByPlaceholder('Ex.: AMANDA_DESKTOP')).toHaveValue('MOCKED-DESKTOP-SMART');
+    await expect(page.getByPlaceholder('e.g. AMANDA_DESKTOP')).toHaveValue('MOCKED-DESKTOP-SMART');
     await expect(page.getByLabel('Device Type *')).toContainText('Windows');
-    await expect(page.getByPlaceholder('Ex.: 4')).toHaveValue('10');
+    await expect(page.getByPlaceholder('e.g. 4')).toHaveValue('10');
   });
 });
 test.describe.serial('When a device is added, updated or deleted', () => {
@@ -62,12 +62,12 @@ test.describe.serial('When a device is added, updated or deleted', () => {
     page,
   }) => {
     await page.getByRole('button', { name: 'Add Device' }).click();
-    await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').click();
-    await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').fill('MOCKED-PLAYWRIGHT_WINDOWS_5GB');
+    await page.getByPlaceholder('e.g. AMANDA_DESKTOP').click();
+    await page.getByPlaceholder('e.g. AMANDA_DESKTOP').fill('MOCKED-PLAYWRIGHT_WINDOWS_5GB');
     await page.getByLabel('Device Type *').click();
     await page.getByLabel('Windows').getByText('Windows').click();
-    await page.getByPlaceholder('Ex.: 4').click();
-    await page.getByPlaceholder('Ex.: 4').fill('5');
+    await page.getByPlaceholder('e.g. 4').click();
+    await page.getByPlaceholder('e.g. 4').fill('5');
     await page.getByRole('button', { name: 'Submit' }).click();
     await expect(page.getByText('Successfully created new')).toBeVisible();
     await expect(page.getByText('Device: MOCKED-PLAYWRIGHT_WINDOWS_5GB, Type')).toBeVisible();
@@ -93,14 +93,14 @@ test.describe.serial('When a device is added, updated or deleted', () => {
   }) => {
     await page.locator('[id="radix-\\:rm\\:"]').click();
     await page.getByRole('menuitem', { name: 'Edit' }).click();
-    await expect(page.getByPlaceholder('Ex.: AMANDA_DESKTOP')).toHaveValue(
+    await expect(page.getByPlaceholder('e.g. AMANDA_DESKTOP')).toHaveValue(
       'MOCKED-PLAYWRIGHT_WINDOWS_5GB',
     );
-    await expect(page.getByPlaceholder('Ex.: 4')).toHaveValue('5');
-    await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').click();
-    await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').fill('MOCKED-PLAYWRIGHT_WINDOWS_4GB');
-    await page.getByPlaceholder('Ex.: 4').click();
-    await page.getByPlaceholder('Ex.: 4').fill('4');
+    await expect(page.getByPlaceholder('e.g. 4')).toHaveValue('5');
+    await page.getByPlaceholder('e.g. AMANDA_DESKTOP').click();
+    await page.getByPlaceholder('e.g. AMANDA_DESKTOP').fill('MOCKED-PLAYWRIGHT_WINDOWS_4GB');
+    await page.getByPlaceholder('e.g. 4').click();
+    await page.getByPlaceholder('e.g. 4').fill('4');
     await page.getByRole('button', { name: 'Submit' }).click();
     await expect(page.getByText('Successfully updated the')).toBeVisible();
     await expect(page.getByText('Device: MOCKED-PLAYWRIGHT_WINDOWS_4GB, Type')).toBeVisible();

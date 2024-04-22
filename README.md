@@ -20,7 +20,7 @@ This project is a challenge for the NinjaOne selection process. The goal is to c
 
 ## Documentation
 
-The detailed documentation for this project is available in the [Notion.so](https://vallori-solutions.notion.site/NinjaOne-Devices-Manager-Documentation-4d4e4a779c6a4064832f9672cfb31313) platform.
+The detailed documentation for this project is available in the [Notion.so platform.](https://vallori-solutions.notion.site/NinjaOne-Devices-Manager-Documentation-4d4e4a779c6a4064832f9672cfb31313) 
 
 ## Live Demo
 You can access the live demo of this project [here](https://devices-manager.vallorisolutions.com/).

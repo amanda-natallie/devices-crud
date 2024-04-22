@@ -44,7 +44,7 @@ function AddEditDeviceView() {
                     <FormLabel>System Name *</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Ex.: AMANDA_DESKTOP"
+                        placeholder="e.g. AMANDA_DESKTOP"
                         {...field}
                         onChange={event => field.onChange(event.target.value.toUpperCase())}
                         isValid={Boolean(!isTouched || (isTouched && !error))}
@@ -97,7 +97,7 @@ function AddEditDeviceView() {
                     <FormLabel>HDD Capacity (GB) *</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Ex.: 4"
+                        placeholder="e.g. 4"
                         {...field}
                         type="number"
                         value={field.value || ''}
