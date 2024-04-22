@@ -17,6 +17,27 @@ This project is a challenge for the NinjaOne selection process. The goal is to c
 - Node.js 18.x or later
 - PNPM 8.x or later
 
+
+## Documentation
+
+The detailed documentation for this project is available in the [Notion.so](https://vallori-solutions.notion.site/NinjaOne-Devices-Manager-Documentation-4d4e4a779c6a4064832f9672cfb31313) platform.
+
+## Live Demo
+You can access the live demo of this project [here](https://devices-manager.vallorisolutions.com/).
+
+## Screenshots
+
+The application is responsive and works on desktop, tablet, and mobile devices.
+
+- Desktop Version:
+
+![Desktop](https://img001.prntscr.com/file/img001/xIzTMoqzT5a4TEo9Py2DUw.png)
+
+- Tablet and Mobile Versions:
+
+![Tablet](https://img001.prntscr.com/file/img001/xp6GV5ffR6qDSnEyac5JZg.png)
+![Mobile](https://img001.prntscr.com/file/img001/-s5e6T9uTXS5NrE5Mddh1Q.png)
+
 ## Getting Started
 
 1. Clone the repository
@@ -25,11 +46,12 @@ This project is a challenge for the NinjaOne selection process. The goal is to c
 
 > **Note:** This application supports mocked API using mockoon. You can import the `mockoon-crud.json` file to Mockoon to use the mocked API. the `pnpm dev:standalone` command starts the application on port `5173` and the mocked server on port `7000`. The REST url is `http://localhost:7000`.
 
- **Important**: The application uses the `REACT_APP_API_URL` environment variable to set the API URL. You can create a `.env` file in the root of the project with the following content to set the API URL:
+ **Important**: The application uses the `REACT_APP_API_URL` environment variable to set the API URL. You need to create a `.env` file in the root of the project with the following content to set the API URL:
 
 ```env
 VITE_USER_REST_API_URL=http://localhost:7000
 ```
+Restart the development server after creating the `.env` file.
 
 ## Scripts
 
@@ -110,5 +132,3 @@ VITE_USER_REST_API_URL=http://localhost:7000
 |   |-- types # Custom types
 |   |-- utils # Utility functions
 ```
-
-
