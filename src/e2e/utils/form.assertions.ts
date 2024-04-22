@@ -1,9 +1,9 @@
 import { Page, expect } from '@playwright/test';
 
 export const checkFormFieldsVisibility = async (page: Page) => {
-  await expect(page.locator('form')).toContainText('System Name *');
-  await expect(page.locator('form')).toContainText('Device Type *');
-  await expect(page.locator('form')).toContainText('HDD Capacity (GB) *');
-  await expect(page.locator('form')).toContainText('Submit');
-  await expect(page.locator('form')).toContainText('Cancel');
+  await expect(page.getByText('System Name *')).toBeVisible();
+  await expect(page.getByText('Device Type *')).toBeVisible();
+  await expect(page.getByText('HDD Capacity (GB) *')).toBeVisible();
+  await expect(page.getByText('Cancel')).toBeVisible();
+  await expect(page.getByText('Submit')).toBeVisible();
 };

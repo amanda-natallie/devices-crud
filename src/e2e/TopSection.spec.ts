@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+test.describe.configure({ mode: 'parallel' });
 test('As an User, I can see the heading when the page loads', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('h1')).toHaveText('Devices');

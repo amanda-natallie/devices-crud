@@ -6,6 +6,9 @@
   "scripts": {
     "clean": "rm -rf build coverage-report node_modules test-results",
     "dev": "vite",
+    "dev:standalone": "concurrently pnpm:dev:standalone:*",
+    "dev:standalone:app": "vite",
+    "dev:standalone:mockoon": "mockoon-cli start --data mockoon-crud.json",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -47,6 +50,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.2.2",
     "@commitlint/config-conventional": "^19.2.2",
+    "@mockoon/cli": "^8.0.0",
     "@playwright/test": "^1.43.1",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.2",
@@ -61,6 +65,7 @@
     "@vitejs/plugin-react-swc": "^3.5.0",
     "@vitest/coverage-v8": "^1.5.0",
     "@vitest/ui": "^1.5.0",
+    "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.1.0",

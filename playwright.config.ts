@@ -2,7 +2,6 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: 'src/e2e',
-  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   reporter: 'list',
@@ -12,8 +11,12 @@ export default defineConfig({
   },
 
   webServer: {
-    command: 'pnpm dev',
+    command: 'pnpm dev:standalone',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
+    env: {
+      VITE_REST_API_URL: 'http://localhost:7000',
+      VITE_USER_NODE_ENV: 'development',
+    },
   },
 });

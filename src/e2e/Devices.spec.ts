@@ -2,122 +2,133 @@ import { expect, test } from '@playwright/test';
 
 import { checkFormFieldsVisibility } from './utils/form.assertions';
 
-test('As an User, I am able to see the validation messages if I try to submit an empty form', async ({
-  page,
-}) => {
+test.beforeEach(async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Add Device' }).click();
-  await page.getByRole('button', { name: 'Submit' }).click();
-  await expect(page.getByText('System Name must be at least')).toBeVisible();
-  await page.getByText('Device Type is required').click();
-  await expect(page.getByText('Device Type is required')).toBeVisible();
-  await expect(page.getByText('HDD Capacity must be greater')).toBeVisible();
 });
 
-test('As an User, I am able to open the Add Device modal and see the correct information', async ({
-  page,
-}) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Add Device' }).click();
-  await expect(page.getByRole('heading')).toContainText('Add Device');
-  checkFormFieldsVisibility(page);
+test.afterEach(async ({ page }) => {
+  await page.close();
 });
 
-test('As an User, I am able to add a device and see the confirmation toast', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
-  await page.getByRole('button', { name: 'Add Device' }).click();
-  await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').click();
-  await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').fill('PLAYWRIGHT_TESt');
-  await page.getByLabel('Device Type *').click();
-  await page.getByLabel('Mac').click();
-  await page.getByPlaceholder('Ex.: 4').click();
-  await page.getByPlaceholder('Ex.: 4').fill('1024');
-  await page.getByRole('button', { name: 'Submit' }).click();
-  await expect(page.getByRole('list')).toContainText(
-    'The devices list was successfully updated with device PLAYWRIGHT_TEST',
-  );
-  await page.evaluate(() => {
-    window.scrollTo(0, document.body.scrollHeight);
+test.describe.parallel('When page loads', () => {
+  test('As an User, I am able to see the devices list title and 12 items', async ({ page }) => {
+    await expect(page.getByTestId('devices-list-title')).toContainText('Devices');
+    await expect(page.getByTestId('devices-list')).toBeVisible();
+    await expect(page.getByTestId('devices-list').evaluate(el => el.children.length)).resolves.toBe(
+      12,
+    );
   });
-  await expect(
-    page
-      .locator('div')
-      .filter({ hasText: /^PLAYWRIGHT_TESTMac workstation - 1024 GB$/ })
-      .nth(2),
-  ).toBeVisible();
-});
-
-test('As an User, I am able to open the Edit Device modal and see the correct information', async ({
-  page,
-}) => {
-  await page.goto('/');
-  await page.locator('[id="radix-\\:rm\\:"]').click();
-  await page.getByRole('menuitem', { name: 'Edit' }).click();
-  await expect(page.getByRole('heading')).toContainText('Edit Device');
-  await checkFormFieldsVisibility(page);
-  await expect(page.getByPlaceholder('Ex.: AMANDA_DESKTOP')).toHaveAttribute(
-    'value',
-    expect.any(String),
-  );
-  await expect(page.getByPlaceholder('Ex.: 4')).toHaveAttribute('value', expect.any(Number));
-});
-
-test('As an User, I am able to open the edit modal, submit without making changes, and see the toast message', async ({
-  page,
-}) => {
-  await page.goto('/');
-  await page.locator('[id="radix-\\:rm\\:"]').click();
-  await page.getByRole('menuitem', { name: 'Edit' }).click();
-  await page.getByRole('button', { name: 'Submit' }).click();
-  await expect(page.getByText('No changes were made. The')).toBeVisible();
-});
-
-test('As an User, I am able to edit an existing Device, see the confirmation toast after submit, and the updated device on the list', async ({
-  page,
-}) => {
-  await page.goto('/');
-  await page.locator('[id="radix-\\:rm\\:"]').click();
-  await page.getByRole('menuitem', { name: 'Edit' }).click();
-  await expect(page.getByPlaceholder('Ex.: AMANDA_DESKTOP')).toHaveAttribute(
-    'value',
-    expect.any(String),
-  );
-  await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').click();
-  await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').fill('');
-  await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').fill('PLAYWRIGHT_EDIT');
-  await expect(page.getByPlaceholder('Ex.: 4')).toHaveAttribute('value', expect.any(Number));
-  await page.getByPlaceholder('Ex.: 4').click();
-  await page.getByPlaceholder('Ex.: 4').fill('520');
-  await page.getByRole('button', { name: 'Submit' }).click();
-  await expect(page.getByRole('list')).toContainText(
-    'The devices list was successfully updated with device PLAYWRIGHT_EDIT',
-  );
-  await page.evaluate(() => {
-    window.scrollTo(0, document.body.scrollHeight);
+  test('As an User, when I open the Add Device modal, I am able to see the validation messages if I try to submit an empty form', async ({
+    page,
+  }) => {
+    await page.getByRole('button', { name: 'Add Device' }).click();
+    await page.getByRole('button', { name: 'Submit' }).click();
+    await expect(page.getByText('System Name must be at least')).toBeVisible();
+    await page.getByText('Device Type is required').click();
+    await expect(page.getByText('Device Type is required')).toBeVisible();
+    await expect(page.getByText('HDD Capacity must be greater')).toBeVisible();
   });
-  await expect(
-    page
-      .getByTestId('app-wrapper')
-      .locator('div')
-      .filter({ hasText: 'PLAYWRIGHT_EDITWindows' })
-      .nth(3),
-  ).toBeVisible();
-});
 
-test('As an User, I am able to see correct values on delete modal, then delete a Device and see the confirmation toast', async ({
-  page,
-}) => {
-  await page.goto('/');
-  await page.evaluate(() => {
-    window.scrollTo(0, document.body.scrollHeight);
+  test('As an User, I am able to open the Add Device modal and see the correct information', async ({
+    page,
+  }) => {
+    await page.getByRole('button', { name: 'Add Device' }).click();
+    await expect(page.getByRole('heading')).toContainText('Add Device');
+    await checkFormFieldsVisibility(page);
   });
-  await page.locator('[id="radix-\\:r1m\\:"]').click();
-  await page.getByRole('menuitem', { name: 'Delete' }).click();
-  await expect(page.getByRole('paragraph')).toContainText(
-    'You are about to delete the device PLAYWRIGHT_EDIT. This action cannot be undone.',
-  );
-  await expect(page.getByRole('heading')).toContainText('Delete device?');
-  await expect(page.getByLabel('Delete device?')).toContainText('Delete');
-  await page.getByRole('button', { name: 'Delete' }).click();
-  await expect(page.getByText('Device PLAYWRIGHT_EDIT')).toBeVisible();
+  test('As an User, I am able to check device info on the list, then open the edit modal and see the selected device information on form', async ({
+    page,
+  }) => {
+    await expect(
+      page.getByTestId('device-item-MOCKED-DESKTOP-SMART_WINDOWS_10').getByRole('heading'),
+    ).toContainText('MOCKED-DESKTOP-SMART');
+    await expect(
+      page.getByTestId('device-item-MOCKED-DESKTOP-SMART_WINDOWS_10').getByRole('paragraph'),
+    ).toContainText('Windows workstation - 10 GB');
+    await page
+      .getByTestId('device-item-MOCKED-DESKTOP-SMART_WINDOWS_10')
+      .getByTestId('options-menu-trigger')
+      .click();
+    await page.getByRole('menuitem', { name: 'Edit' }).click();
+    await expect(page.getByRole('heading')).toContainText('Edit Device');
+    await checkFormFieldsVisibility(page);
+    await expect(page.getByPlaceholder('Ex.: AMANDA_DESKTOP')).toHaveValue('MOCKED-DESKTOP-SMART');
+    await expect(page.getByLabel('Device Type *')).toContainText('Windows');
+    await expect(page.getByPlaceholder('Ex.: 4')).toHaveValue('10');
+  });
+});
+test.describe.serial('When a device is added, updated or deleted', () => {
+  test('As an User, I am able to add a new device, see the confirmation toast and see the new device on the devices list', async ({
+    page,
+  }) => {
+    await page.getByRole('button', { name: 'Add Device' }).click();
+    await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').click();
+    await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').fill('MOCKED-PLAYWRIGHT_WINDOWS_5GB');
+    await page.getByLabel('Device Type *').click();
+    await page.getByLabel('Windows').getByText('Windows').click();
+    await page.getByPlaceholder('Ex.: 4').click();
+    await page.getByPlaceholder('Ex.: 4').fill('5');
+    await page.getByRole('button', { name: 'Submit' }).click();
+    await expect(page.getByText('Successfully created new')).toBeVisible();
+    await expect(page.getByText('Device: MOCKED-PLAYWRIGHT_WINDOWS_5GB, Type')).toBeVisible();
+    await expect(
+      page
+        .getByTestId('app-wrapper')
+        .locator('div')
+        .filter({ hasText: 'MOCKED-PLAYWRIGHT_WINDOWS_5GBWindows' })
+        .nth(3),
+    ).toBeVisible();
+  });
+  test('As an User, I am able to open the edit modal, submit without making changes, and see the toast message', async ({
+    page,
+  }) => {
+    await page.locator('[id="radix-\\:rm\\:"]').click();
+    await page.getByRole('menuitem', { name: 'Edit' }).click();
+    await page.getByRole('button', { name: 'Submit' }).click();
+    await expect(page.getByText('No changes were made. The')).toBeVisible();
+  });
+
+  test('As an User, I am able to edit a device, see the confirmation toast and see the updated device on the devices list', async ({
+    page,
+  }) => {
+    await page.locator('[id="radix-\\:rm\\:"]').click();
+    await page.getByRole('menuitem', { name: 'Edit' }).click();
+    await expect(page.getByPlaceholder('Ex.: AMANDA_DESKTOP')).toHaveValue(
+      'MOCKED-PLAYWRIGHT_WINDOWS_5GB',
+    );
+    await expect(page.getByPlaceholder('Ex.: 4')).toHaveValue('5');
+    await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').click();
+    await page.getByPlaceholder('Ex.: AMANDA_DESKTOP').fill('MOCKED-PLAYWRIGHT_WINDOWS_4GB');
+    await page.getByPlaceholder('Ex.: 4').click();
+    await page.getByPlaceholder('Ex.: 4').fill('4');
+    await page.getByRole('button', { name: 'Submit' }).click();
+    await expect(page.getByText('Successfully updated the')).toBeVisible();
+    await expect(page.getByText('Device: MOCKED-PLAYWRIGHT_WINDOWS_4GB, Type')).toBeVisible();
+    await expect(
+      page
+        .getByTestId('app-wrapper')
+        .locator('div')
+        .filter({ hasText: 'MOCKED-PLAYWRIGHT_WINDOWS_4GBWindows' })
+        .nth(3),
+    ).toBeVisible();
+  });
+
+  test('As an User, I am able to delete a device and no longer see it on the list', async ({
+    page,
+  }) => {
+    await page.locator('[id="radix-\\:rm\\:"]').click();
+    await page.getByRole('menuitem', { name: 'Delete' }).click();
+    await expect(page.getByRole('paragraph')).toContainText(
+      'You are about to delete the device MOCKED-PLAYWRIGHT_WINDOWS_4GB. This action cannot be undone.',
+    );
+    await page.getByRole('button', { name: 'Delete' }).click();
+    await expect(page.getByText('Device MOCKED-PLAYWRIGHT_WINDOWS_4GB')).toBeVisible();
+    await expect(
+      page
+        .getByTestId('app-wrapper')
+        .locator('div')
+        .filter({ hasText: 'MOCKED-PLAYWRIGHT_WINDOWS_4GBWindows' })
+        .nth(3),
+    ).not.toBeVisible();
+  });
 });
