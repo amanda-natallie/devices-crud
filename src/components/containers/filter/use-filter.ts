@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from 'store';
 import { DEVICE_TYPES, DeviceType, IDevice } from 'types';
 
-import { getSortStrategy } from './filter-strategy';
+import { getSortStrategy } from 'utils/filter/sort/sort-strategies';
 
 const useFilter = () => {
   const [filteredDevices, setFilteredDevices] = useState<IDevice[]>([]);

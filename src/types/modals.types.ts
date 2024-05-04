@@ -27,7 +27,7 @@ export const schema = z.object({
       message: 'System Name must be at least 3 characters',
     })
     .refine(isNotBlankSpaces, () => ({
-      message: 'System name cannot be blank spaces',
+      message: 'System Name cannot be blank spaces',
     })),
   type: z.string({
     required_error: 'Device Type is required',

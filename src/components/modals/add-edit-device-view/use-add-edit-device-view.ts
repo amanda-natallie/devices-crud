@@ -21,7 +21,7 @@ const useAddEditDeviceView = () => {
     useEditDevice();
 
   const formMethods = useForm<FormValues>({
-    mode: 'all',
+    mode: 'onChange',
     resolver: zodResolver(schema),
     defaultValues: {
       id: '',

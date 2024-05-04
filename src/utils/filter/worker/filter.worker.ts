@@ -1,11 +1,13 @@
-import getSortStrategy from './filter-strategy';
+import { IDevice } from 'types';
+
+import { getSortStrategy } from 'utils/filter/sort/sort-strategies';
 
 onmessage = function (e) {
   const { devices, deviceTypes, searchValue, orderResultBy, orderBy } = e.data;
   const sorter = getSortStrategy(orderResultBy, orderBy);
 
   let filteredDevices = devices.filter(
-    device =>
+    (device: IDevice) =>
       (deviceTypes.includes('ALL') ||
         deviceTypes.length === 0 ||
         deviceTypes.includes(device.type)) &&
