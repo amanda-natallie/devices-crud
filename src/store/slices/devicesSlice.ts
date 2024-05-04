@@ -45,6 +45,12 @@ export const devicesSlice = createSlice({
     setPreDebounceSearchValueAction: (state, action: PayloadAction<string>) => {
       state.preDebounceSearchValue = action.payload;
     },
+    setFilter(state, action: PayloadAction<DevicesState>) {
+      return {
+        ...state,
+        filters: action.payload,
+      };
+    },
   },
 });
 
@@ -60,4 +66,5 @@ export const {
   setSearchValueAction,
   setPreDebounceSearchValueAction,
   setDeviceFromAPIAction,
+  setFilter,
 } = devicesSlice.actions;

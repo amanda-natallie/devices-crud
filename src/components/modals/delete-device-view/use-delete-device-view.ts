@@ -26,9 +26,14 @@ const useDeleteDeviceView = () => {
 
   const handleDeleteDevice = async () => {
     if (deviceFromStore) {
-      await deleteDevice(deviceFromStore.id);
-      closeModal();
-      toast(`Device ${deviceFromStore.system_name} deleted successfully.`);
+      try {
+        await deleteDevice(deviceFromStore.id);
+        toast.success(`Device ${deviceFromStore.system_name} deleted successfully.`);
+      } catch (error) {
+        toast.error((error as Error).message);
+      } finally {
+        closeModal();
+      }
     }
   };
 

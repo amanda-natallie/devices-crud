@@ -16,6 +16,7 @@ export enum ModalActionTypes {
   setModalView,
 }
 
+const isNotBlankSpaces = (name: string) => name.trim().length > 0;
 export const schema = z.object({
   id: z.string().optional(),
   system_name: z
@@ -24,7 +25,10 @@ export const schema = z.object({
     })
     .min(3, {
       message: 'System Name must be at least 3 characters',
-    }),
+    })
+    .refine(isNotBlankSpaces, () => ({
+      message: 'System name cannot be blank spaces',
+    })),
   type: z.string({
     required_error: 'Device Type is required',
   }),

@@ -1,8 +1,16 @@
 import { ReactNode } from 'react';
 
 /* Components */
+
+export const DEVICE_TYPES = {
+  ALL: 'ALL',
+  WINDOWS: 'WINDOWS',
+  MAC: 'MAC',
+  LINUX: 'LINUX',
+} as const;
+
 export interface DeviceTypeSelect {
-  id: DeviceType;
+  id: keyof typeof DEVICE_TYPES;
   label: string;
   icon: ReactNode;
 }

@@ -48,25 +48,34 @@ const useAddEditDeviceView = () => {
     onCloseEdit();
   };
 
+  const onEdit = () => {
+    formMethods.reset();
+    onClose();
+    toast('No changes were made. The device was not updated.');
+  };
+
+  const onAdd = (payload: {
+    system_name: string;
+    type: string;
+    hdd_capacity: number;
+    id?: string;
+  }) => {
+    onAddSubmit(payload);
+    formMethods.reset();
+  };
+
   const onSubmit = (data: FormValues) => {
     const payload = {
       ...data,
       hdd_capacity: data.hdd_capacity.toString(),
     };
-    if (isEdit) {
-      if (deviceFromAPI && JSON.stringify(deviceFromAPI) === JSON.stringify(payload)) {
-        formMethods.reset();
-        onClose();
-        toast('No changes were made. The device was not updated.');
-        return;
-      }
+    if (!isEdit) return onAdd(data);
 
-      onEditSubmit(data);
-    } else {
-      onAddSubmit(data);
-    }
-    formMethods.reset();
+    return deviceFromAPI && JSON.stringify(deviceFromAPI) === JSON.stringify(payload)
+      ? onEdit()
+      : onEditSubmit(data);
   };
+
   const isFetching = isEditFetching;
   const isSubmitting = isEdit ? isEditSubmitting : isAddSubmiting;
   const shouldDisableButtons = isSubmitting || isEditFetching;

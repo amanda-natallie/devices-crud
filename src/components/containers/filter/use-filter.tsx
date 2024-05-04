@@ -1,88 +1,53 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useAppSelector } from 'store';
-import { DeviceType, IDevice } from 'types';
+import { DEVICE_TYPES, DeviceType, IDevice } from 'types';
+
+import { getSortStrategy } from './filter-strategy';
 
 const useFilter = () => {
   const [filteredDevices, setFilteredDevices] = useState<IDevice[]>([]);
-
   const { devices, orderBy, orderResultBy, deviceTypes, searchValue } = useAppSelector(
     state => state.devicesState,
   );
 
-  const defaultSort = useCallback(
+  const sortDevices = useCallback(
     (list: IDevice[]) => {
-      const draft = [...list];
-
-      if (orderResultBy === 'hdd_capacity' && orderBy === 'ASC') {
-        return draft.sort((a, b) => parseInt(a.hdd_capacity, 10) - parseInt(b.hdd_capacity, 10));
-      }
-      return draft;
+      const sorter = getSortStrategy(orderResultBy, orderBy);
+      return sorter ? [...list].sort(sorter) : list;
     },
     [orderBy, orderResultBy],
   );
 
-  const resetFilter = useCallback(() => {
-    const draft = [...devices];
-    draft.sort((a, b) => parseInt(a.hdd_capacity, 10) - parseInt(b.hdd_capacity, 10));
-    setFilteredDevices(draft);
-  }, [devices]);
-
-  const filterByType = useCallback(() => {
-    if (deviceTypes.includes('ALL') || deviceTypes.length === 0) {
-      return devices;
-    }
-    return defaultSort(devices.filter(device => deviceTypes.includes(device.type as DeviceType)));
-  }, [deviceTypes, defaultSort, devices]);
-
-  const filterBySearch = useCallback(
-    () =>
-      defaultSort(
-        searchValue.length === 0
-          ? devices
-          : devices.filter(device =>
-              device.system_name.toLowerCase().includes(searchValue.toLowerCase()),
-            ),
-      ),
-    [defaultSort, devices, searchValue],
+  const isDeviceTypeSelected = useCallback(
+    (device: IDevice) =>
+      deviceTypes.includes(DEVICE_TYPES.ALL) ||
+      deviceTypes.length === 0 ||
+      deviceTypes.includes(device.type as DeviceType),
+    [deviceTypes],
   );
 
-  const filterBySort = useCallback(
-    (data: IDevice[]) =>
-      data.sort((a, b) => {
-        if (orderResultBy === 'system_name') {
-          return orderBy === 'ASC'
-            ? a.system_name.localeCompare(b.system_name)
-            : b.system_name.localeCompare(a.system_name);
-        }
-        const numA = Number(a.hdd_capacity);
-        const numB = Number(b.hdd_capacity);
-        return orderBy === 'ASC' ? numA - numB : numB - numA;
-      }),
-    [orderBy, orderResultBy],
+  const isDeviceMatchingSearch = useCallback(
+    (device: IDevice) =>
+      searchValue.length === 0 ||
+      device.system_name.toLowerCase().includes(searchValue.toLowerCase()),
+    [searchValue],
   );
 
-  const filterDevices = useCallback(() => {
-    let results = filterByType();
-    results = filterBySearch().filter(device => results.includes(device));
-    results = filterBySort(results);
-    return results;
-  }, [filterByType, filterBySearch, filterBySort]);
+  const filteredAndSortedDevices = useMemo(() => {
+    const filtered = devices.filter(
+      device => isDeviceTypeSelected(device) && isDeviceMatchingSearch(device),
+    );
+    return sortDevices(filtered);
+  }, [devices, sortDevices, isDeviceTypeSelected, isDeviceMatchingSearch]);
 
   useEffect(() => {
-    const resultsFiltered = filterDevices();
-    setFilteredDevices(resultsFiltered);
-  }, [devices, orderBy, orderResultBy, deviceTypes, searchValue, filterDevices]);
-
-  useEffect(() => {
-    if (devices.length > 0 && filteredDevices.length === 0 && !searchValue) {
-      resetFilter();
-    }
-  }, [devices, filteredDevices, resetFilter, searchValue]);
+    setFilteredDevices(filteredAndSortedDevices);
+  }, [filteredAndSortedDevices]);
 
   return {
     filteredDevices,
-    resetFilter,
+    resetFilter: () => setFilteredDevices(sortDevices(devices)),
   };
 };
 
