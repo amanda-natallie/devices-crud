@@ -11,9 +11,9 @@ function Devices() {
 
   return (
     <div className="container my-6 px-0">
-      <h3 className="font-medium text-md pl-4 mb-2" data-testid="devices-list-title">
+      <h2 className="font-medium text-md pl-4 mb-2" data-testid="devices-list-title">
         Devices
-      </h3>
+      </h2>
       <div className="flex flex-col w-full" data-testid="devices-list">
         {filteredDevices.length > 0 ? (
           filteredDevices.map(device => <MemoizedDeviceItem key={device.id} {...device} />)

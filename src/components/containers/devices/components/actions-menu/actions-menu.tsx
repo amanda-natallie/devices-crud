@@ -18,7 +18,11 @@ export function ActionsMenu({ id }: ActionsMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" data-testid="options-menu-trigger">
+        <Button
+          variant="ghost"
+          data-testid="options-menu-trigger"
+          aria-label={`actions-menu-for-${id}`}
+        >
           <Icon name="options" />
         </Button>
       </DropdownMenuTrigger>

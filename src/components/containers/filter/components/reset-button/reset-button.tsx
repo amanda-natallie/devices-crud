@@ -19,6 +19,8 @@ export const ResetFilterButton = () => {
 
   return (
     <Button
+      name="reset-button"
+      aria-label="Reset filter"
       variant="ghost"
       onClick={toggleRotation}
       className={cn(

@@ -13,9 +13,6 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
-test.afterEach(async ({ page }) => {
-  await page.close();
-});
 test.describe('When a device is added, updated or deleted', () => {
   test('As an User, I am able to add a new device, see the confirmation toast and see the new device on the devices list', async ({
     page,
@@ -23,8 +20,8 @@ test.describe('When a device is added, updated or deleted', () => {
     await page.getByRole('button', { name: 'Add Device' }).click();
     await page.getByPlaceholder('e.g. AMANDA_DESKTOP').click();
     await page.getByPlaceholder('e.g. AMANDA_DESKTOP').fill('MOCKED-PLAYWRIGHT_WINDOWS_5GB');
-    await page.getByLabel('Device Type *').click();
-    await page.getByLabel('Windows').getByText('Windows').click();
+    await page.getByText('Select a type').click();
+    await page.getByLabel('Windows', { exact: true }).click();
     await page.getByPlaceholder('e.g. 4').click();
     await page.getByPlaceholder('e.g. 4').fill('5');
     await page.getByRole('button', { name: 'Submit' }).click();
@@ -104,8 +101,8 @@ test.describe('Combining Filters and Devices Actions', () => {
     await checkNumberOfDevices(page, 3);
     await page.getByRole('button', { name: 'Add Device' }).click();
     await page.getByPlaceholder('e.g. AMANDA_DESKTOP').fill('PLAYWRIGHT-WINDOWS');
-    await page.getByLabel('Device Type *').click();
-    await page.getByLabel('Windows').click();
+    await page.getByText('Select a type').click();
+    await page.getByLabel('Windows', { exact: true }).click();
     await page.getByPlaceholder('e.g. 4').click();
     await page.getByPlaceholder('e.g. 4').fill('305');
     await page.getByRole('button', { name: 'Submit' }).click();
