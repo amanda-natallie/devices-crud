@@ -1,0 +1,100 @@
+{
+  "uuid": "738dff9d-302d-4210-ad32-6dc0ca18edb3",
+  "lastMigration": 32,
+  "name": "Devices Manager CRUD",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 7000,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "d027ebd8-9751-46fe-89ea-0392e4f9a7ef",
+      "type": "crud",
+      "documentation": "",
+      "method": "",
+      "endpoint": "devices",
+      "responses": [
+        {
+          "uuid": "82896b2f-f396-4f9b-ae76-ee7c11001f2b",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "DATABUCKET",
+          "filePath": "",
+          "databucketID": "pdur",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "d027ebd8-9751-46fe-89ea-0392e4f9a7ef"
+    }
+  ],
+  "proxyMode": true,
+  "proxyHost": "https://api.github.com/",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With, X-correlationid"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [
+    {
+      "uuid": "ba7f1751-4f6a-42c5-a884-abf47cd5d5ce",
+      "id": "pdur",
+      "name": "Devices",
+      "documentation": "",
+      "value": "[\n  {\n    \"id\": \"MOCKED-MAC-LEADER_MAC_2048\",\n    \"system_name\": \"MOCKED-MAC-LEADER\",\n    \"type\": \"MAC\",\n    \"hdd_capacity\": \"2048\"\n  },\n  {\n    \"id\": \"MOCKED-ARMANDO_WINDOWS_256\",\n    \"system_name\": \"MOCKED-ARMANDO\",\n    \"type\": \"WINDOWS\",\n    \"hdd_capacity\": \"256\"\n  },\n  {\n    \"id\": \"MOCKED-FIRST-MAC_MAC_180\",\n    \"system_name\": \"MOCKED-FIRST-MAC\",\n    \"type\": \"MAC\",\n    \"hdd_capacity\": \"180\"\n  },\n  {\n    \"id\": \"MOCKED-GOOD-MAC_MAC_500\",\n    \"system_name\": \"MOCKED-GOOD-MAC\",\n    \"type\": \"MAC\",\n    \"hdd_capacity\": \"500\"\n  },\n  {\n    \"id\": \"MOCKED-JACK-GUEST_LINUX_302\",\n    \"system_name\": \"MOCKED-JACK-GUEST\",\n    \"type\": \"LINUX\",\n    \"hdd_capacity\": \"302\"\n  },\n  {\n    \"id\": \"MOCKED-HOME-ONE_WINDOWS_50\",\n    \"system_name\": \"MOCKED-HOME-ONE\",\n    \"type\": \"WINDOWS\",\n    \"hdd_capacity\": \"50\"\n  },\n  {\n    \"id\": \"MOCKED-GILBERT-COMPUTER_WINDOWS_750\",\n    \"system_name\": \"MOCKED-GILBERT-COMPUTER\",\n    \"type\": \"WINDOWS\",\n    \"hdd_capacity\": \"750\"\n  },\n  {\n    \"id\": \"MOCKED-MOON-SMART_WINDOWS_256\",\n    \"system_name\": \"MOCKED-MOON-SMART\",\n    \"type\": \"WINDOWS\",\n    \"hdd_capacity\": \"256\"\n  },\n  {\n    \"id\": \"MOCKED-JULIO-MAC-LOCAL_MAC_512\",\n    \"system_name\": \"MOCKED-JULIO-MAC-LOCAL\",\n    \"type\": \"MAC\",\n    \"hdd_capacity\": \"512\"\n  },\n  {\n    \"id\": \"MOCKED-RYANN-HOST_LINUX_220\",\n    \"system_name\": \"MOCKED-RYANN-HOST\",\n    \"type\": \"LINUX\",\n    \"hdd_capacity\": \"220\"\n  }\n]"
+    }
+  ],
+  "callbacks": []
+}

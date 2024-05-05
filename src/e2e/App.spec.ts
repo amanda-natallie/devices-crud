@@ -6,7 +6,7 @@ import {
   expectGetByTestIdToBeVisible,
   expectGetByTestIdToContainText,
   expectGetByTextToBeVisible,
-} from './utils/form.assertions';
+} from './utils/assertions';
 
 test.describe.configure({ mode: 'parallel' });
 test.beforeEach(async ({ page }) => {
@@ -20,11 +20,11 @@ test.describe('When page loads', () => {
     await page.goto('/');
     await expect(page).toHaveTitle('Device Manager - NinjaOne');
   });
-  test('As an User, I am able to see the devices list title and 12 items', async ({ page }) => {
+  test('As an User, I am able to see the devices list title and 10 items', async ({ page }) => {
     await expectGetByTestIdToContainText(page, 'devices-list-title', 'Devices');
     await expectGetByTestIdToBeVisible(page, 'devices-list');
     await page.waitForTimeout(500);
-    await checkNumberOfDevices(page, 12);
+    await checkNumberOfDevices(page, 10);
   });
   test('As an User, I can see the Filters when page loads', async ({ page }) => {
     await page.goto('/');
@@ -92,21 +92,15 @@ test.describe('Modals', () => {
   test('As an User, I am able to check device info on the list, then open the edit modal and see the selected device information on form', async ({
     page,
   }) => {
-    await expect(
-      page.getByTestId('device-item-MOCKED-DESKTOP-SMART_WINDOWS_10').getByRole('heading'),
-    ).toContainText('MOCKED-DESKTOP-SMART');
-    await expect(
-      page.getByTestId('device-item-MOCKED-DESKTOP-SMART_WINDOWS_10').getByRole('paragraph'),
-    ).toContainText('Windows workstation - 10 GB');
-    await page
-      .getByTestId('device-item-MOCKED-DESKTOP-SMART_WINDOWS_10')
-      .getByTestId('options-menu-trigger')
-      .click();
+    const device = await page.getByTestId('device-item-MOCKED-HOME-ONE');
+    await expect(device.getByRole('heading')).toContainText('MOCKED-HOME-ONE');
+    await expect(device.getByRole('paragraph')).toContainText('Windows workstation - 50 GB');
+    await device.getByTestId('options-menu-trigger').click();
     await page.getByRole('menuitem', { name: 'Edit' }).click();
     await expect(page.getByRole('heading')).toContainText('Edit Device');
     await checkFormFieldsVisibility(page);
-    await expect(page.getByPlaceholder('e.g. AMANDA_DESKTOP')).toHaveValue('MOCKED-DESKTOP-SMART');
+    await expect(page.getByPlaceholder('e.g. AMANDA_DESKTOP')).toHaveValue('MOCKED-HOME-ONE');
     await expect(page.getByLabel('Device Type *')).toContainText('Windows');
-    await expect(page.getByPlaceholder('e.g. 4')).toHaveValue('10');
+    await expect(page.getByPlaceholder('e.g. 4')).toHaveValue('50');
   });
 });

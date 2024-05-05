@@ -11,7 +11,7 @@ export default defineConfig({
   },
 
   webServer: {
-    command: 'pnpm dev:standalone',
+    command: 'pnpm e2e:standalone',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
     env: {
