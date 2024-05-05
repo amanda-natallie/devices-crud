@@ -1,9 +1,12 @@
+import { useCallback } from 'react';
+
 import { Input } from 'components/ui/input';
 
 import useSearchInput from './use-search-input';
 
 export function SearchInput() {
   const { handleSearch, query } = useSearchInput();
+  const memoizedHandleSearch = useCallback(handleSearch, [handleSearch]);
 
   return (
     <div
@@ -12,7 +15,7 @@ export function SearchInput() {
     >
       <Input
         icon="search"
-        onChange={handleSearch}
+        onChange={memoizedHandleSearch}
         value={query}
         placeholder="Search"
         id="search-devices"

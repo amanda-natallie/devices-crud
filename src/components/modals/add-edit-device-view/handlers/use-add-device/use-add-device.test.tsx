@@ -100,6 +100,19 @@ describe('useAddDevice', () => {
     });
   });
 
+  it('should show  a error toast when addDevice fails', async () => {
+    setup();
+    const error = new Error('Failed to add device');
+    addDeviceMock.mockRejectedValueOnce(error);
+    const data = { system_name: 'New Device', type: 'server', hdd_capacity: 100 };
+    await act(async () => {
+      await result.current.onAddSubmit(data);
+    });
+    waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(error.message);
+    });
+  });
+
   it('should close the modal and clear selected device on successful addition', async () => {
     setup();
     const data = { system_name: 'New Device', type: 'server', hdd_capacity: 100 };

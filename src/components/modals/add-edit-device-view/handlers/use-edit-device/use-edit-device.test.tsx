@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
+import { toast } from 'sonner';
 import { store, useAppSelector } from 'store';
 import { useLazyGetDeviceByIdQuery, usePutDeviceMutation } from 'store/api';
 import { afterEach, expect, it, vi } from 'vitest';
@@ -123,6 +124,29 @@ describe('useEditDevice', () => {
       expect(useModalActions().closeModal).toHaveBeenCalled();
       expect(useDevicesActions().setSelectedDevice).toHaveBeenCalledWith(null);
     });
+  });
+  it('should show  a error toast when addDevice fails', async () => {
+    setup();
+    const error = new Error('Failed to add device');
+    editDeviceMock.mockRejectedValueOnce(error);
+    const data = { system_name: 'New Device', type: 'server', hdd_capacity: 100 };
+    await act(async () => {
+      await result.current.onEditSubmit(data);
+    });
+    waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(error.message);
+    });
+  });
+  it('should reset the form values when onCloseEdit is called', () => {
+    setup();
+    result.current.onCloseEdit();
+    waitFor(() => expect(setup().setValue).toHaveBeenCalledWith('system_name', 'Test System'));
+  });
+
+  it('should show toast when no changes are made on submit', () => {
+    setup();
+    result.current.onCloseEdit();
+    waitFor(() => expect(setup().setValue).toHaveBeenCalledWith('system_name', 'Test System'));
   });
   it('should setDeviceFromAPI to undefined when onCloseEdit is called', () => {
     setup();

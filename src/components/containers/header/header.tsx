@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import ninjaOneBrand from 'assets/brand.svg';
 
 function Header() {
@@ -10,4 +12,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default memo(Header);

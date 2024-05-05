@@ -1,8 +1,14 @@
+import { lazy } from 'react';
+
 import { useGetDevicesQuery } from 'store/api';
 
-import { Devices, Filter, Header, TopSection } from 'components/containers';
+import { Filter, Header, TopSection } from 'components/containers';
 
 import { HomeSkeleton } from './skeleton';
+
+const Devices = lazy(() =>
+  import('components/containers').then(module => ({ default: module.Devices })),
+);
 
 function Home() {
   const { isFetching } = useGetDevicesQuery();

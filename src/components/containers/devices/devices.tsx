@@ -1,6 +1,10 @@
+import { memo } from 'react';
+
 import useFilter from 'components/containers/filter/use-filter';
 
 import { DeviceItem } from './components';
+
+const MemoizedDeviceItem = memo(DeviceItem);
 
 function Devices() {
   const { filteredDevices } = useFilter();
@@ -12,7 +16,7 @@ function Devices() {
       </h3>
       <div className="flex flex-col w-full" data-testid="devices-list">
         {filteredDevices.length > 0 ? (
-          filteredDevices.map(device => <DeviceItem key={device.id} {...device} />)
+          filteredDevices.map(device => <MemoizedDeviceItem key={device.id} {...device} />)
         ) : (
           <p className="text-center text-gray-500">No devices found</p>
         )}
@@ -21,4 +25,4 @@ function Devices() {
   );
 }
 
-export default Devices;
+export default memo(Devices);

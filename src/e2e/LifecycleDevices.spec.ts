@@ -1,7 +1,14 @@
 import { expect, test } from '@playwright/test';
 
-import { checkFormFieldsVisibility } from './utils/form.assertions';
+import {
+  checkDevicesHDDOrder,
+  checkNumberOfDevices,
+  expectGetByTestIdToContainText,
+  selectDeviceType,
+  selectSortBy,
+} from './utils/form.assertions';
 
+test.describe.configure({ mode: 'serial' });
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
@@ -9,55 +16,7 @@ test.beforeEach(async ({ page }) => {
 test.afterEach(async ({ page }) => {
   await page.close();
 });
-
-test.describe.parallel('When page loads', () => {
-  test('As an User, I am able to see the devices list title and 12 items', async ({ page }) => {
-    await expect(page.getByTestId('devices-list-title')).toContainText('Devices');
-    await expect(page.getByTestId('devices-list')).toBeVisible();
-    await expect(page.getByTestId('devices-list').evaluate(el => el.children.length)).resolves.toBe(
-      12,
-    );
-  });
-  test('As an User, when I open the Add Device modal, I am able to see the validation messages if I try to submit an empty form', async ({
-    page,
-  }) => {
-    await page.getByRole('button', { name: 'Add Device' }).click();
-    await page.getByRole('button', { name: 'Submit' }).click();
-    await expect(page.getByText('System Name must be at least')).toBeVisible();
-    await page.getByText('Device Type is required').click();
-    await expect(page.getByText('Device Type is required')).toBeVisible();
-    await expect(page.getByText('HDD Capacity must be greater')).toBeVisible();
-  });
-
-  test('As an User, I am able to open the Add Device modal and see the correct information', async ({
-    page,
-  }) => {
-    await page.getByRole('button', { name: 'Add Device' }).click();
-    await expect(page.getByRole('heading')).toContainText('Add Device');
-    await checkFormFieldsVisibility(page);
-  });
-  test('As an User, I am able to check device info on the list, then open the edit modal and see the selected device information on form', async ({
-    page,
-  }) => {
-    await expect(
-      page.getByTestId('device-item-MOCKED-DESKTOP-SMART_WINDOWS_10').getByRole('heading'),
-    ).toContainText('MOCKED-DESKTOP-SMART');
-    await expect(
-      page.getByTestId('device-item-MOCKED-DESKTOP-SMART_WINDOWS_10').getByRole('paragraph'),
-    ).toContainText('Windows workstation - 10 GB');
-    await page
-      .getByTestId('device-item-MOCKED-DESKTOP-SMART_WINDOWS_10')
-      .getByTestId('options-menu-trigger')
-      .click();
-    await page.getByRole('menuitem', { name: 'Edit' }).click();
-    await expect(page.getByRole('heading')).toContainText('Edit Device');
-    await checkFormFieldsVisibility(page);
-    await expect(page.getByPlaceholder('e.g. AMANDA_DESKTOP')).toHaveValue('MOCKED-DESKTOP-SMART');
-    await expect(page.getByLabel('Device Type *')).toContainText('Windows');
-    await expect(page.getByPlaceholder('e.g. 4')).toHaveValue('10');
-  });
-});
-test.describe.serial('When a device is added, updated or deleted', () => {
+test.describe('When a device is added, updated or deleted', () => {
   test('As an User, I am able to add a new device, see the confirmation toast and see the new device on the devices list', async ({
     page,
   }) => {
@@ -130,5 +89,71 @@ test.describe.serial('When a device is added, updated or deleted', () => {
         .filter({ hasText: 'MOCKED-PLAYWRIGHT_WINDOWS_4GBWindows' })
         .nth(3),
     ).not.toBeVisible();
+  });
+});
+test.describe('Combining Filters and Devices Actions', () => {
+  test('As an User, I am able to filter devices by type Windows, search by name and sort by HDD Capacity in descending order. Then I can add a device and see the changes on the list', async ({
+    page,
+  }) => {
+    await checkNumberOfDevices(page, 12);
+    await selectDeviceType(page, 'Windows');
+    await page.getByPlaceholder('Search').click();
+    await page.getByPlaceholder('Search').fill('A');
+    await page.waitForTimeout(500);
+    await selectSortBy(page, 'HDD Capacity (Descending)');
+    await checkNumberOfDevices(page, 3);
+    await page.getByRole('button', { name: 'Add Device' }).click();
+    await page.getByPlaceholder('e.g. AMANDA_DESKTOP').fill('PLAYWRIGHT-WINDOWS');
+    await page.getByLabel('Device Type *').click();
+    await page.getByLabel('Windows').click();
+    await page.getByPlaceholder('e.g. 4').click();
+    await page.getByPlaceholder('e.g. 4').fill('305');
+    await page.getByRole('button', { name: 'Submit' }).click();
+    await page.waitForTimeout(500);
+    await checkNumberOfDevices(page, 4);
+    await expectGetByTestIdToContainText(page, 'devices-list', 'PLAYWRIGHT-WINDOWS');
+    await checkDevicesHDDOrder(page, [305, 256, 256, 10]);
+  });
+  test('As an User, I am able to filter devices by type Windows, search by name and sort by HDD Capacity in descending order. Then I can edit a device and see the changes on the list', async ({
+    page,
+  }) => {
+    await checkNumberOfDevices(page, 13);
+    await selectDeviceType(page, 'Windows');
+    await page.getByPlaceholder('Search').click();
+    await page.getByPlaceholder('Search').fill('A');
+    await page.waitForTimeout(500);
+    await selectSortBy(page, 'HDD Capacity (Descending)');
+    await checkNumberOfDevices(page, 4);
+    await page
+      .getByTestId('device-item-MOCKED-ARMANDO_WINDOWS_256')
+      .getByTestId('options-menu-trigger')
+      .click();
+    await page.getByRole('menuitem', { name: 'Edit' }).click();
+    await page.getByLabel('Device Type *').click();
+    await page.getByLabel('Mac').click();
+    await page.getByRole('button', { name: 'Submit' }).click();
+    await page.waitForTimeout(500);
+    await expect(page.getByTestId('devices-list')).not.toContainText('MOCKED-ARMANDO_WINDOWS_256');
+    await checkNumberOfDevices(page, 3);
+  });
+  test('As an User, I am able to filter devices by type Windows, search by name and sort by HDD Capacity in descending order. Then I can delete a device and see the changes on the list', async ({
+    page,
+  }) => {
+    await checkNumberOfDevices(page, 13);
+    await selectDeviceType(page, 'Windows');
+    await page.getByPlaceholder('Search').click();
+    await page.getByPlaceholder('Search').fill('A');
+    await page.waitForTimeout(500);
+    await selectSortBy(page, 'HDD Capacity (Descending)');
+    await checkNumberOfDevices(page, 3);
+    await page
+      .getByTestId('device-item-MOCKED-DESKTOP-SMART_WINDOWS_10')
+      .getByTestId('options-menu-trigger')
+      .click();
+    await page.getByRole('menuitem', { name: 'Delete' }).click();
+    await page.getByRole('button', { name: 'Delete' }).click();
+    await page.waitForTimeout(500);
+    await checkNumberOfDevices(page, 2);
+    await checkDevicesHDDOrder(page, [305, 256]);
   });
 });

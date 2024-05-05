@@ -22,7 +22,7 @@ const useEditDevice = () => {
     };
 
     if (selectedDevice && !deviceFromAPI) {
-      getDeviceById(selectedDevice!);
+      getDeviceById(selectedDevice);
     }
   }, [deviceFromAPI, getById, getByIdState.data, getByIdState.isSuccess, selectedDevice]);
 
